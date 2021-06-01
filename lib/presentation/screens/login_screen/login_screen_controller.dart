@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
 import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart';
 import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen.dart';
 import 'package:pet_tracker_youtube/presentation/screens/screens.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
 
@@ -30,11 +31,10 @@ class LoginScreenController {
     required BuildContext scaffoldContext,
     required GlobalKey<FormState> formKey,
   }) async {
-    print(email + "  |  " + password);
     if (formKey.currentState!.validate()) {
       try {
         await _authRepo.loginWithEmailAndPassword(email, password);
-        // Navigator.of(scaffoldContext).pushNamed(routeName)
+        Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
       } on Failure catch (e) {
         ScaffoldMessenger.of(scaffoldContext)
             .showSnackBar(Snackbars.displayErrorSnackbar(e.message!));

@@ -8,6 +8,8 @@ class CustomRouter {
         return SignupScreen.route();
       case LoginScreen.routeName:
         return LoginScreen.route();
+      case HomeScreen.routeName:
+        return HomeScreen.route();
       default:
         return _buildErrorRoute(settings: settings);
     }
