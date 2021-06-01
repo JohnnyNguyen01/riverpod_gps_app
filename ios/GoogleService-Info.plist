@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>485569815565-n9rdgal0fksf9ifkhnuv6550gimc6t3n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.485569815565-n9rdgal0fksf9ifkhnuv6550gimc6t3n</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD4LYXZnH60Fs7sR4YN2wCHEmGFS998hzQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>485569815565</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.johnnynguyen.dogTracker</string>
+	<key>PROJECT_ID</key>
+	<string>pettracker-a93ec</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pettracker-a93ec.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:485569815565:ios:ec86576ab92e49866b6144</string>
+	<key>DATABASE_URL</key>
+	<string>https://pettracker-a93ec.firebaseio.com</string>
+</dict>
+</plist>
