@@ -27,13 +27,12 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 15),
           PasswordTextFormField(controller: _passwordController),
           const SizedBox(height: 40),
-          _SubmitButton(onPressed: () {})
-          // => widget.pageController.handleSignupButton(
-          //     email: _emailTextController.text,
-          //     password: _emailPassOneController.text,
-          //     passwordTwo: _emailPassTwoController.text,
-          //     scaffoldContext: widget.scaffoldContext,
-          //     formKey: _formKey)),
+          _SubmitButton(
+              onPressed: () => widget.pageController.handleLoginButton(
+                  email: _emailTextController.text,
+                  password: _passwordController.text,
+                  scaffoldContext: widget.scaffoldContext,
+                  formKey: _formKey))
         ],
       ),
     );
