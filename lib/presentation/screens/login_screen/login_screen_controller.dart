@@ -6,6 +6,7 @@ import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen.dart';
 import 'package:pet_tracker_youtube/presentation/screens/screens.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
+import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
 final loginScreenControllerProvider = Provider<LoginScreenController>((ref) {
   final authRepoImpl = ref.read(firebaseAuthProvider);
@@ -34,6 +35,7 @@ class LoginScreenController {
     if (formKey.currentState!.validate()) {
       try {
         await _authRepo.loginWithEmailAndPassword(email, password);
+        _read(userStateProvider.notifier).loginuser(email: email, name: "");
         Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
       } on Failure catch (e) {
         ScaffoldMessenger.of(scaffoldContext)

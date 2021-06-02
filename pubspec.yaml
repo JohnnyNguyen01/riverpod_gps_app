@@ -39,6 +39,7 @@ dependencies:
   fluttertoast: ^8.0.7
   freezed: ^0.14.2
   freezed_annotation: ^0.14.2
+  geolocator: ^7.0.3
   google_fonts: ^2.1.0
   google_maps_flutter: ^2.0.6
 

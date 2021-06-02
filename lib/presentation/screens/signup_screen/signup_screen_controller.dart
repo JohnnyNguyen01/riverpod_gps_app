@@ -46,7 +46,6 @@ class SignupScreenController {
     }
   }
 
-  ///
   void handleLoginPageButton({required BuildContext context}) {
     Navigator.of(context).pushNamed(LoginScreen.routeName);
   }

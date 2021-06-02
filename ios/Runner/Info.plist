@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Will be used to get this phone's location for Google Maps.</string>
+	<key>NSLocationWhenInUsageDescription</key>
+	<string>Will be used to grab current location for Google Maps.</string>
 </dict>
 </plist>

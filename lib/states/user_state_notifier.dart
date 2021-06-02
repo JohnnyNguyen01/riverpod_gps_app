@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
 
 abstract class UserState {
@@ -19,15 +21,29 @@ class UserSignedIn extends UserState {
 }
 
 final userStateProvider = StateNotifierProvider<UserStateNotifier, User>((ref) {
-  return UserStateNotifier();
+  final gpsRepo = ref.read(deviceGpsRepoProvider);
+  return UserStateNotifier(gpsRepo: gpsRepo);
 });
 
 class UserStateNotifier extends StateNotifier<User> {
+  final DeviceGps _gpsRepo;
+
   //todo refactor below
-  UserStateNotifier() : super(const User(email: "", userName: ""));
+  UserStateNotifier({required DeviceGps gpsRepo})
+      : _gpsRepo = gpsRepo,
+        super(const User(email: "", userName: "", location: LatLng(0, 0)));
 
   //todo: utilise loading state as well
-  void loginuser({required User user}) {
+  void loginuser({required String email, required String name}) {
+    final user =
+        User(email: email, userName: name, location: const LatLng(0, 0));
     state = user;
+  }
+
+  ///Set the user's location [LatLng] to their current location.
+  void setUserLatLng() async {
+    final currentLocation = await _gpsRepo.getDevicePosition();
+    state = state.copyWith(
+        location: LatLng(currentLocation.latitude, currentLocation.longitude));
   }
 }

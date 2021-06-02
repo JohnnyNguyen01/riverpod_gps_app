@@ -16,10 +16,14 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserTearOff {
   const _$UserTearOff();
 
-  _User call({required String? email, required String? userName}) {
+  _User call(
+      {required String? email,
+      required String? userName,
+      required LatLng location}) {
     return _User(
       email: email,
       userName: userName,
+      location: location,
     );
   }
 }
@@ -31,6 +35,7 @@ const $User = _$UserTearOff();
 mixin _$User {
   String? get email => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
+  LatLng get location => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
@@ -40,7 +45,7 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-  $Res call({String? email, String? userName});
+  $Res call({String? email, String? userName, LatLng location});
 }
 
 /// @nodoc
@@ -55,6 +60,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
   $Res call({
     Object? email = freezed,
     Object? userName = freezed,
+    Object? location = freezed,
   }) {
     return _then(_value.copyWith(
       email: email == freezed
@@ -65,6 +71,10 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String?,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as LatLng,
     ));
   }
 }
@@ -74,7 +84,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
   @override
-  $Res call({String? email, String? userName});
+  $Res call({String? email, String? userName, LatLng location});
 }
 
 /// @nodoc
@@ -90,6 +100,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
   $Res call({
     Object? email = freezed,
     Object? userName = freezed,
+    Object? location = freezed,
   }) {
     return _then(_User(
       email: email == freezed
@@ -100,6 +111,10 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String?,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as LatLng,
     ));
   }
 }
@@ -107,16 +122,19 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_User implements _User {
-  const _$_User({required this.email, required this.userName});
+  const _$_User(
+      {required this.email, required this.userName, required this.location});
 
   @override
   final String? email;
   @override
   final String? userName;
+  @override
+  final LatLng location;
 
   @override
   String toString() {
-    return 'User(email: $email, userName: $userName)';
+    return 'User(email: $email, userName: $userName, location: $location)';
   }
 
   @override
@@ -127,14 +145,18 @@ class _$_User implements _User {
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.userName, userName) ||
                 const DeepCollectionEquality()
-                    .equals(other.userName, userName)));
+                    .equals(other.userName, userName)) &&
+            (identical(other.location, location) ||
+                const DeepCollectionEquality()
+                    .equals(other.location, location)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(email) ^
-      const DeepCollectionEquality().hash(userName);
+      const DeepCollectionEquality().hash(userName) ^
+      const DeepCollectionEquality().hash(location);
 
   @JsonKey(ignore: true)
   @override
@@ -143,13 +165,17 @@ class _$_User implements _User {
 }
 
 abstract class _User implements User {
-  const factory _User({required String? email, required String? userName}) =
-      _$_User;
+  const factory _User(
+      {required String? email,
+      required String? userName,
+      required LatLng location}) = _$_User;
 
   @override
   String? get email => throw _privateConstructorUsedError;
   @override
   String? get userName => throw _privateConstructorUsedError;
+  @override
+  LatLng get location => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;

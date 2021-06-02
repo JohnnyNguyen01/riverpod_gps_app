@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'google_map/home_map.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -14,6 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read(homeScreenControllerProvider).initFunctions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
