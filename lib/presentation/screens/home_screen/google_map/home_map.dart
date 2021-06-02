@@ -27,14 +27,15 @@ class _HomeMapState extends State<HomeMap> {
         final currentUserState = watch(userStateProvider);
         return GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: CameraPosition(
-            target: currentUserState.location,
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(-33.926870, 150.859040),
             zoom: 14.4746,
           ),
           zoomControlsEnabled: true,
           rotateGesturesEnabled: true,
+          // myLocationEnabled: true,
+          myLocationButtonEnabled: true,
           myLocationEnabled: true,
-          myLocationButtonEnabled: false,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },

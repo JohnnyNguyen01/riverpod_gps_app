@@ -42,8 +42,13 @@ class UserStateNotifier extends StateNotifier<User> {
 
   ///Set the user's location [LatLng] to their current location.
   void setUserLatLng() async {
-    final currentLocation = await _gpsRepo.getDevicePosition();
-    state = state.copyWith(
-        location: LatLng(currentLocation.latitude, currentLocation.longitude));
+    try {
+      final currentLocation = await _gpsRepo.getDevicePosition();
+      state = state.copyWith(
+          location:
+              LatLng(currentLocation.latitude, currentLocation.longitude));
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
   }
 }

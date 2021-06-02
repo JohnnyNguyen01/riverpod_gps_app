@@ -17,13 +17,14 @@ class HomeScreenController {
 
   ///Check and request for Gps access on the device. Run on initState prior to
   ///homescreen startup.
-  void requestGpsPermissions() async => _gpsRepo.requestDevicePermissions();
+  void requestGpsPermissions() async =>
+      await _gpsRepo.requestDevicePermissions();
 
   void setUserCurrentLocation() =>
       _read(userStateProvider.notifier).setUserLatLng();
 
-  void initFunctions() {
+  void initFunctions() async {
     requestGpsPermissions();
-    setUserCurrentLocation();
+    // setUserCurrentLocation();
   }
 }

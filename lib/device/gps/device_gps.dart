@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pet_tracker_youtube/domain/models/models.dart';
 
 final deviceGpsRepoProvider = Provider<DeviceGps>((ref) {
   return DeviceGps();
@@ -27,6 +28,15 @@ class DeviceGps {
 
   ///Get the device's current location.
   Future<Position> getDevicePosition() async {
+    var permission = await Geolocator.checkPermission();
+    print(permission);
+    if (permission == LocationPermission.denied) {
+      await requestDevicePermissions();
+    }
+    print(permission);
+    if (permission == LocationPermission.denied) {
+      throw Failure(code: "", message: "Error with device gps permissions");
+    }
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
   }
