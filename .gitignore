@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#hide api keys
+/android/app/src/main/AndroidManifest.xml
+/android/google-services.json
+/ios/Runner/AppDelegate.swift
+/ios/GoogleService-Info.plist
