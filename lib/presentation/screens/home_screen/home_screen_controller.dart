@@ -25,6 +25,6 @@ class HomeScreenController {
 
   void initFunctions() async {
     requestGpsPermissions();
-    // setUserCurrentLocation();
+    setUserCurrentLocation();
   }
 }

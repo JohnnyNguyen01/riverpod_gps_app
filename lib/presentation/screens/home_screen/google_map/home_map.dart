@@ -14,12 +14,6 @@ class HomeMap extends StatefulWidget {
 class _HomeMapState extends State<HomeMap> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  // ignore: prefer_const_declarations
-  // static final CameraPosition _kGooglePlex = const CameraPosition(
-  //   target: LatLng(37.42796133580664, -122.085749655962),
-  //   zoom: 14.4746,
-  // );
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -31,9 +25,8 @@ class _HomeMapState extends State<HomeMap> {
             target: LatLng(-33.926870, 150.859040),
             zoom: 14.4746,
           ),
-          zoomControlsEnabled: true,
+          // zoomControlsEnabled: true,
           rotateGesturesEnabled: true,
-          // myLocationEnabled: true,
           myLocationButtonEnabled: true,
           myLocationEnabled: true,
           onMapCreated: (GoogleMapController controller) {
@@ -42,5 +35,10 @@ class _HomeMapState extends State<HomeMap> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
