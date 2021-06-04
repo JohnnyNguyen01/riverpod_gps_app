@@ -23,15 +23,19 @@ class DatabaseRepoImplementation implements DatabaseRepository {
 
   @override
   Stream<PetCoordinate> getPetGpsCoordinatesAsBroadcastStream() async* {
-    final _petCoordinateStream = _db
-        .collection('PiCoordinates')
-        .orderBy('date-time')
-        .snapshots()
-        .asBroadcastStream();
-    for (final querySnapshot in await _petCoordinateStream.toList()) {
-      for (final doc in querySnapshot.docs) {
-        yield PetCoordinate.fromFirestore(doc.data());
+    try {
+      final _petCoordinateStream = _db
+          .collection('PiCoordinates')
+          .orderBy('date-time')
+          .snapshots()
+          .asBroadcastStream();
+      for (final querySnapshot in await _petCoordinateStream.toList()) {
+        for (final doc in querySnapshot.docs) {
+          yield PetCoordinate.fromFirestore(doc.data());
+        }
       }
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
     }
   }
 

@@ -18,11 +18,13 @@ class _HomeMapState extends State<HomeMap> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final currentUserState = watch(userStateProvider);
+        final userState = watch(userStateProvider);
         return GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(-33.926870, 150.859040),
+          initialCameraPosition: CameraPosition(
+            target: userState is UserLoggedIn
+                ? userState.user.location
+                : const LatLng(-33.926870, 150.859040),
             zoom: 14.4746,
           ),
           // zoomControlsEnabled: true,
