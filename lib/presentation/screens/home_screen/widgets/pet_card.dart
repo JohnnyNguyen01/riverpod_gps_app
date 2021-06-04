@@ -69,7 +69,7 @@ class _BuildCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 12.0, top: 20),
+          padding: const EdgeInsets.only(left: 12.0, top: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
