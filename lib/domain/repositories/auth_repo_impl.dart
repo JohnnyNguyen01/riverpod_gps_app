@@ -38,4 +38,13 @@ class FirebaseAuthImpl implements AuthRepository {
       throw Failure(code: e.code, message: e.message);
     }
   }
+
+  @override
+  User? getUser() {
+    try {
+      return _authInstance.currentUser;
+    } on FirebaseAuthException catch (e) {
+      throw Failure(code: e.code, message: e.message!);
+    }
+  }
 }

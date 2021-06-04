@@ -3,8 +3,18 @@ import 'package:pet_tracker_youtube/utils/validators.dart';
 
 class AuthTextFormField extends StatelessWidget {
   final TextEditingController _controller;
+  final String hintText;
+  final Color fillColor;
+  final Color cursorColor;
+  final Color borderSideColor;
 
-  const AuthTextFormField({Key? key, required TextEditingController controller})
+  const AuthTextFormField(
+      {Key? key,
+      required TextEditingController controller,
+      required this.fillColor,
+      required this.hintText,
+      required this.cursorColor,
+      required this.borderSideColor})
       : _controller = controller,
         super(key: key);
 
@@ -12,12 +22,12 @@ class AuthTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
-      cursorColor: Colors.orange,
+      cursorColor: cursorColor,
       decoration: InputDecoration(
-        hintText: 'Email',
-        fillColor: Colors.orange.shade200,
+        hintText: hintText,
+        fillColor: fillColor,
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.orange),
+          borderSide: BorderSide(color: borderSideColor),
           borderRadius: BorderRadius.circular(12),
         ),
         filled: true,
@@ -25,7 +35,9 @@ class AuthTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none),
       ),
-      validator: StringValidators.instance.emailValidator,
+      validator: hintText == "Email"
+          ? StringValidators.instance.emailValidator
+          : StringValidators.instance.nameValidator,
     );
   }
 }

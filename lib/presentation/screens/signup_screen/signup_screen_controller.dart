@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
-import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart';
-import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen.dart';
 import 'package:pet_tracker_youtube/presentation/screens/screens.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
 final signupScreenController = Provider<SignupScreenController>((ref) {
-  final authImpl = ref.read(firebaseAuthProvider);
-  return SignupScreenController(authImpl, ref.read);
+  final userStateNotifier = ref.read(userStateProvider.notifier);
+  return SignupScreenController(userStateNotifier: userStateNotifier);
 });
 
 class SignupScreenController {
-  final AuthRepository? _authRepository;
-  final Function _read;
-  SignupScreenController(this._authRepository, this._read);
+  final UserStateNotifier _userStateNotifier;
+
+  SignupScreenController({required UserStateNotifier userStateNotifier})
+      : _userStateNotifier = userStateNotifier;
 
   ///Verifies the form and then signs up the user to firebase
   void handleSignupButton(
       {required String email,
+      required String userName,
       required String password,
       required String passwordTwo,
       required BuildContext scaffoldContext,
@@ -32,7 +34,9 @@ class SignupScreenController {
     //login with firebase
     {
       try {
-        _authRepository!.signupWithEmailAndPassword(email, password);
+        await _userStateNotifier.signupUser(
+            email: email, name: userName, password: password);
+        Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
       } on Failure catch (e) {
         ScaffoldMessenger.of(scaffoldContext).showSnackBar(
           Snackbars.displayErrorSnackbar(e.message!),

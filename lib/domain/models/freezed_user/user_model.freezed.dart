@@ -19,10 +19,12 @@ class _$UserModelTearOff {
   _UserModel call(
       {required String? email,
       required String? userName,
+      required String? uid,
       required LatLng location}) {
     return _UserModel(
       email: email,
       userName: userName,
+      uid: uid,
       location: location,
     );
   }
@@ -35,6 +37,7 @@ const $UserModel = _$UserModelTearOff();
 mixin _$UserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
+  String? get uid => throw _privateConstructorUsedError;
   LatLng get location => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -46,7 +49,7 @@ mixin _$UserModel {
 abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res>;
-  $Res call({String? email, String? userName, LatLng location});
+  $Res call({String? email, String? userName, String? uid, LatLng location});
 }
 
 /// @nodoc
@@ -61,6 +64,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   $Res call({
     Object? email = freezed,
     Object? userName = freezed,
+    Object? uid = freezed,
     Object? location = freezed,
   }) {
     return _then(_value.copyWith(
@@ -71,6 +75,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
       userName: userName == freezed
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as String?,
       location: location == freezed
           ? _value.location
@@ -86,7 +94,7 @@ abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
           _UserModel value, $Res Function(_UserModel) then) =
       __$UserModelCopyWithImpl<$Res>;
   @override
-  $Res call({String? email, String? userName, LatLng location});
+  $Res call({String? email, String? userName, String? uid, LatLng location});
 }
 
 /// @nodoc
@@ -102,6 +110,7 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
   $Res call({
     Object? email = freezed,
     Object? userName = freezed,
+    Object? uid = freezed,
     Object? location = freezed,
   }) {
     return _then(_UserModel(
@@ -112,6 +121,10 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
       userName: userName == freezed
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as String?,
       location: location == freezed
           ? _value.location
@@ -125,18 +138,23 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 
 class _$_UserModel implements _UserModel {
   const _$_UserModel(
-      {required this.email, required this.userName, required this.location});
+      {required this.email,
+      required this.userName,
+      required this.uid,
+      required this.location});
 
   @override
   final String? email;
   @override
   final String? userName;
   @override
+  final String? uid;
+  @override
   final LatLng location;
 
   @override
   String toString() {
-    return 'UserModel(email: $email, userName: $userName, location: $location)';
+    return 'UserModel(email: $email, userName: $userName, uid: $uid, location: $location)';
   }
 
   @override
@@ -148,6 +166,8 @@ class _$_UserModel implements _UserModel {
             (identical(other.userName, userName) ||
                 const DeepCollectionEquality()
                     .equals(other.userName, userName)) &&
+            (identical(other.uid, uid) ||
+                const DeepCollectionEquality().equals(other.uid, uid)) &&
             (identical(other.location, location) ||
                 const DeepCollectionEquality()
                     .equals(other.location, location)));
@@ -158,24 +178,37 @@ class _$_UserModel implements _UserModel {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(userName) ^
+      const DeepCollectionEquality().hash(uid) ^
       const DeepCollectionEquality().hash(location);
 
   @JsonKey(ignore: true)
   @override
   _$UserModelCopyWith<_UserModel> get copyWith =>
       __$UserModelCopyWithImpl<_UserModel>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toFirestoreMap() {
+    return {
+      'uid': uid,
+      'email': email,
+      'userName': userName,
+    };
+  }
 }
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {required String? email,
       required String? userName,
+      required String? uid,
       required LatLng location}) = _$_UserModel;
 
   @override
   String? get email => throw _privateConstructorUsedError;
   @override
   String? get userName => throw _privateConstructorUsedError;
+  @override
+  String? get uid => throw _privateConstructorUsedError;
   @override
   LatLng get location => throw _privateConstructorUsedError;
   @override

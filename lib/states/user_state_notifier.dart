@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,7 +12,12 @@ final userStateProvider =
     StateNotifierProvider<UserStateNotifier, UserState>((ref) {
   final gpsRepo = ref.read(deviceGpsRepoProvider);
   final authRepo = ref.read(firebaseAuthProvider);
-  return UserStateNotifier(gpsRepo: gpsRepo, authRepo: authRepo);
+  final dbRepo = ref.read(databaseRepoImplProvider);
+  return UserStateNotifier(
+    gpsRepo: gpsRepo,
+    authRepo: authRepo,
+    dbRepo: dbRepo,
+  );
 });
 
 /*
@@ -23,8 +30,12 @@ abstract class UserState {
 class UserInitial extends UserState {
   final UserModel initialUser;
   const UserInitial()
-      : initialUser =
-            const UserModel(email: "", userName: "", location: LatLng(0, 0));
+      : initialUser = const UserModel(
+          email: "",
+          userName: "",
+          location: LatLng(0, 0),
+          uid: '',
+        );
 }
 
 class UserLoggingIn extends UserState {
@@ -48,31 +59,64 @@ class UserError extends UserState {
 class UserStateNotifier extends StateNotifier<UserState> {
   final DeviceGps _gpsRepo;
   final AuthRepository _authRepo;
+  final DatabaseRepository _dbRepo;
 
   UserStateNotifier(
-      {required DeviceGps gpsRepo, required AuthRepository authRepo})
+      {required DeviceGps gpsRepo,
+      required AuthRepository authRepo,
+      required DatabaseRepository dbRepo})
       : _gpsRepo = gpsRepo,
         _authRepo = authRepo,
+        _dbRepo = dbRepo,
         super(const UserInitial());
 
   Future<void> loginuser(
       {required String email,
       required String name,
       required String password}) async {
-    //set state to loading
-    //login user
-    //set user to new state
     try {
       state = const UserLoggingIn();
       await _authRepo.loginWithEmailAndPassword(email, password);
       final userPosition = await _gpsRepo.getDevicePosition();
       final userLatLng = LatLng(userPosition.latitude, userPosition.longitude);
-      final user =
-          UserModel(email: email, userName: name, location: userLatLng);
+      final user = UserModel(
+          email: email,
+          userName: name,
+          location: userLatLng,
+          uid: _authRepo.getUser()!.uid);
       state = UserLoggedIn(user: user);
+      log("User Logged In Successfully: ${user.toString()}");
     } on FirebaseAuthException catch (e) {
       state = UserError(error: e.message!);
       throw Failure(code: e.code, message: e.message);
+    }
+  }
+
+  ///Sign's up a new user to Firebase, and creates a new document in `Users`
+  ///collection. User app state is then set to the new user.
+  //todo: Check network exceptions
+  Future<void> signupUser(
+      {required String email,
+      required String name,
+      required String password}) async {
+    try {
+      state = const UserLoggingIn();
+      final userPos = await _gpsRepo.getDevicePosition();
+      final userLatLng = LatLng(userPos.latitude, userPos.longitude);
+      await _authRepo.signupWithEmailAndPassword(email, password);
+      //set state
+      final user = UserModel(
+          email: email,
+          userName: name,
+          location: userLatLng,
+          uid: _authRepo.getUser()!.uid);
+      state = UserLoggedIn(user: user);
+      //add new doc to firestore
+      await _dbRepo.addNewUser(user: user);
+      log("User Signed Up Successfully: ${user.toString()}");
+    } on FirebaseAuthException catch (e) {
+      state = UserError(error: e.message!);
+      throw Failure(code: e.code, message: e.message!);
     }
   }
 

@@ -31,18 +31,19 @@ class _LoginFormState extends State<LoginForm> {
 
       //todo: clean up somehow
       Widget _mapButtonToState() {
+        Widget progressIndicator = const Center(
+          child: CircularProgressIndicator(),
+        );
         if (userState is UserInitial) {
           return _SubmitButton(
             onPressed: () => onPressed(),
           );
         } else if (userState is UserLoggingIn) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return progressIndicator;
         } else if (userState is UserLoggedIn) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return progressIndicator;
+        } else if (userState is UserError) {
+          return progressIndicator;
         } else {
           return _SubmitButton(
             onPressed: () => onPressed(),
@@ -54,7 +55,13 @@ class _LoginFormState extends State<LoginForm> {
         key: _formKey,
         child: Column(
           children: [
-            AuthTextFormField(controller: _emailTextController),
+            AuthTextFormField(
+              controller: _emailTextController,
+              cursorColor: Colors.orange,
+              fillColor: Colors.orange.shade200,
+              borderSideColor: Colors.orange,
+              hintText: 'Email',
+            ),
             const SizedBox(height: 15),
             PasswordTextFormField(controller: _passwordController),
             const SizedBox(height: 40),

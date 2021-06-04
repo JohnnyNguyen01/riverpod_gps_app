@@ -17,6 +17,20 @@ class StringValidators {
     }
   };
 
+  ///Validate the Name field in order to ensure that it's not null and containts
+  ///no specual characters
+  // ignore: prefer_function_declarations_over_variables
+  final String? Function(String?)? nameValidator = (String? val) {
+    final validCharacters = RegExp(r'^[a-zA-Z0-9 ]+$');
+    if (val == null || val.isEmpty) {
+      return 'Please enter in your name';
+    } else if (validCharacters.hasMatch(val)) {
+      return null;
+    } else {
+      return 'Please enter a valid name';
+    }
+  };
+
   /// Validate passwords for firbase which must be at least 8 characters long.
   ///
   /// `val` - the password to be checked

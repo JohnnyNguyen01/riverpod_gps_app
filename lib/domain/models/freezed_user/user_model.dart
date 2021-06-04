@@ -8,6 +8,15 @@ abstract class UserModel with _$UserModel {
   const factory UserModel({
     required String? email,
     required String? userName,
+    required String? uid,
     required LatLng location,
   }) = _UserModel;
+
+  Map<String, dynamic> toFirestoreMap() {
+    return {
+      'uid': uid,
+      'email': email,
+      'userName': userName,
+    };
+  }
 }

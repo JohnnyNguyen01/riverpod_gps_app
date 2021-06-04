@@ -28,14 +28,11 @@ class DeviceGps {
 
   ///Get the device's current location.
   Future<Position> getDevicePosition() async {
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      await requestDevicePermissions();
-      if (permission == LocationPermission.denied) {
-        throw Failure(code: "", message: "Error with device gps permissions");
-      }
+    try {
+      return await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
     }
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
   }
 }

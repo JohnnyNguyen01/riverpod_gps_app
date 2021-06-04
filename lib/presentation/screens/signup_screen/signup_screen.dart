@@ -115,6 +115,7 @@ class _BuildForm extends StatefulWidget {
 
 class __BuildFormState extends State<_BuildForm> {
   final _emailTextController = TextEditingController();
+  final _userNameController = TextEditingController();
   final _emailPassOneController = TextEditingController();
   final _emailPassTwoController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -125,7 +126,21 @@ class __BuildFormState extends State<_BuildForm> {
       key: _formKey,
       child: Column(
         children: [
-          AuthTextFormField(controller: _emailTextController),
+          AuthTextFormField(
+            controller: _emailTextController,
+            cursorColor: Colors.orange,
+            fillColor: Colors.orange.shade200,
+            borderSideColor: Colors.orange,
+            hintText: 'Email',
+          ),
+          const SizedBox(height: 15),
+          AuthTextFormField(
+            controller: _userNameController,
+            fillColor: const Color(0xFF8ACAC0),
+            cursorColor: Colors.black,
+            borderSideColor: Colors.black,
+            hintText: 'Name',
+          ),
           const SizedBox(height: 15),
           PasswordTextFormField(controller: _emailPassOneController),
           const SizedBox(height: 15),
@@ -134,6 +149,7 @@ class __BuildFormState extends State<_BuildForm> {
           _SubmitButton(
               onPressed: () => widget.pageController.handleSignupButton(
                   email: _emailTextController.text,
+                  userName: _userNameController.text,
                   password: _emailPassOneController.text,
                   passwordTwo: _emailPassTwoController.text,
                   scaffoldContext: widget.scaffoldContext,
@@ -147,6 +163,7 @@ class __BuildFormState extends State<_BuildForm> {
   void dispose() {
     super.dispose();
     _emailTextController.dispose();
+    _userNameController.dispose();
     _emailPassOneController.dispose();
     _emailPassTwoController.dispose();
   }
