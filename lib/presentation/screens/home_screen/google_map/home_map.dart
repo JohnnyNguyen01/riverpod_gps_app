@@ -21,13 +21,13 @@ class _HomeMapState extends State<HomeMap> {
         final userState = watch(userStateProvider);
         return GoogleMap(
           mapType: MapType.normal,
+          //todo: should maybe point to Tarzan?
           initialCameraPosition: CameraPosition(
             target: userState is UserLoggedIn
                 ? userState.user.location
                 : const LatLng(-33.926870, 150.859040),
             zoom: 14.4746,
           ),
-          // zoomControlsEnabled: true,
           rotateGesturesEnabled: true,
           myLocationButtonEnabled: true,
           myLocationEnabled: true,
