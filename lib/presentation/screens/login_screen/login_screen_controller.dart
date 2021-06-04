@@ -34,8 +34,8 @@ class LoginScreenController {
   }) async {
     if (formKey.currentState!.validate()) {
       try {
-        await _authRepo.loginWithEmailAndPassword(email, password);
-        _read(userStateProvider.notifier).loginuser(email: email, name: "");
+        await _read(userStateProvider.notifier)
+            .loginuser(email: email, password: password, name: "");
         Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
       } on Failure catch (e) {
         ScaffoldMessenger.of(scaffoldContext)

@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
-part of 'user.dart';
+part of 'user_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,14 +13,14 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$UserTearOff {
-  const _$UserTearOff();
+class _$UserModelTearOff {
+  const _$UserModelTearOff();
 
-  _User call(
+  _UserModel call(
       {required String? email,
       required String? userName,
       required LatLng location}) {
-    return _User(
+    return _UserModel(
       email: email,
       userName: userName,
       location: location,
@@ -29,32 +29,33 @@ class _$UserTearOff {
 }
 
 /// @nodoc
-const $User = _$UserTearOff();
+const $UserModel = _$UserModelTearOff();
 
 /// @nodoc
-mixin _$User {
+mixin _$UserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
   LatLng get location => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $UserModelCopyWith<UserModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res>;
+abstract class $UserModelCopyWith<$Res> {
+  factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
+      _$UserModelCopyWithImpl<$Res>;
   $Res call({String? email, String? userName, LatLng location});
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
+  _$UserModelCopyWithImpl(this._value, this._then);
 
-  final User _value;
+  final UserModel _value;
   // ignore: unused_field
-  final $Res Function(User) _then;
+  final $Res Function(UserModel) _then;
 
   @override
   $Res call({
@@ -80,21 +81,22 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$UserCopyWith(_User value, $Res Function(_User) then) =
-      __$UserCopyWithImpl<$Res>;
+abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
+  factory _$UserModelCopyWith(
+          _UserModel value, $Res Function(_UserModel) then) =
+      __$UserModelCopyWithImpl<$Res>;
   @override
   $Res call({String? email, String? userName, LatLng location});
 }
 
 /// @nodoc
-class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
-    implements _$UserCopyWith<$Res> {
-  __$UserCopyWithImpl(_User _value, $Res Function(_User) _then)
-      : super(_value, (v) => _then(v as _User));
+class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
+    implements _$UserModelCopyWith<$Res> {
+  __$UserModelCopyWithImpl(_UserModel _value, $Res Function(_UserModel) _then)
+      : super(_value, (v) => _then(v as _UserModel));
 
   @override
-  _User get _value => super._value as _User;
+  _UserModel get _value => super._value as _UserModel;
 
   @override
   $Res call({
@@ -102,7 +104,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object? userName = freezed,
     Object? location = freezed,
   }) {
-    return _then(_User(
+    return _then(_UserModel(
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -121,8 +123,8 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_User implements _User {
-  const _$_User(
+class _$_UserModel implements _UserModel {
+  const _$_UserModel(
       {required this.email, required this.userName, required this.location});
 
   @override
@@ -134,13 +136,13 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(email: $email, userName: $userName, location: $location)';
+    return 'UserModel(email: $email, userName: $userName, location: $location)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _User &&
+        (other is _UserModel &&
             (identical(other.email, email) ||
                 const DeepCollectionEquality().equals(other.email, email)) &&
             (identical(other.userName, userName) ||
@@ -160,15 +162,15 @@ class _$_User implements _User {
 
   @JsonKey(ignore: true)
   @override
-  _$UserCopyWith<_User> get copyWith =>
-      __$UserCopyWithImpl<_User>(this, _$identity);
+  _$UserModelCopyWith<_UserModel> get copyWith =>
+      __$UserModelCopyWithImpl<_UserModel>(this, _$identity);
 }
 
-abstract class _User implements User {
-  const factory _User(
+abstract class _UserModel implements UserModel {
+  const factory _UserModel(
       {required String? email,
       required String? userName,
-      required LatLng location}) = _$_User;
+      required LatLng location}) = _$_UserModel;
 
   @override
   String? get email => throw _privateConstructorUsedError;
@@ -178,5 +180,6 @@ abstract class _User implements User {
   LatLng get location => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;
+  _$UserModelCopyWith<_UserModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }

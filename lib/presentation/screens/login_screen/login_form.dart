@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/presentation/screens/login_screen/login_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
+import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginScreenController pageController;
   final BuildContext scaffoldContext;
-  const LoginForm(
-      {required this.pageController, required this.scaffoldContext});
+  LoginForm({required this.pageController, required this.scaffoldContext});
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -19,23 +20,49 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          AuthTextFormField(controller: _emailTextController),
-          const SizedBox(height: 15),
-          PasswordTextFormField(controller: _passwordController),
-          const SizedBox(height: 40),
-          _SubmitButton(
-              onPressed: () => widget.pageController.handleLoginButton(
-                  email: _emailTextController.text,
-                  password: _passwordController.text,
-                  scaffoldContext: widget.scaffoldContext,
-                  formKey: _formKey))
-        ],
-      ),
-    );
+    return Consumer(builder: (context, watch, child) {
+      final userState = watch(userStateProvider);
+
+      void onPressed() => widget.pageController.handleLoginButton(
+          email: _emailTextController.text,
+          password: _passwordController.text,
+          scaffoldContext: widget.scaffoldContext,
+          formKey: _formKey);
+
+      //todo: clean up somehow
+      Widget _mapButtonToState() {
+        if (userState is UserInitial) {
+          return _SubmitButton(
+            onPressed: () => onPressed(),
+          );
+        } else if (userState is UserLoggingIn) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (userState is UserLoggedIn) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return _SubmitButton(
+            onPressed: () => onPressed(),
+          );
+        }
+      }
+
+      return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            AuthTextFormField(controller: _emailTextController),
+            const SizedBox(height: 15),
+            PasswordTextFormField(controller: _passwordController),
+            const SizedBox(height: 40),
+            _mapButtonToState()
+          ],
+        ),
+      );
+    });
   }
 
   @override
