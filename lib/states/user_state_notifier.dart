@@ -47,6 +47,10 @@ class UserLoggedIn extends UserState {
   const UserLoggedIn({required this.user});
 }
 
+class UserLoggingOut extends UserState {
+  const UserLoggingOut();
+}
+
 //todo: currently throwing Failure() on exceptions
 class UserError extends UserState {
   final String error;
@@ -76,6 +80,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
       required String password}) async {
     try {
       state = const UserLoggingIn();
+      log(state.toString());
       await _authRepo.loginWithEmailAndPassword(email, password);
       final userPosition = await _gpsRepo.getDevicePosition();
       final userLatLng = LatLng(userPosition.latitude, userPosition.longitude);
@@ -116,6 +121,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
       log("User Signed Up Successfully: ${user.toString()}");
     } on FirebaseAuthException catch (e) {
       state = UserError(error: e.message!);
+      log(state.toString());
       throw Failure(code: e.code, message: e.message!);
     }
   }
@@ -129,5 +135,14 @@ class UserStateNotifier extends StateNotifier<UserState> {
     // } catch (e) {
     //   throw Failure(code: "", message: e.toString());
     // }
+  }
+
+  ///logout the current usedr
+  void logoutUser() async {
+    state = const UserLoggingOut();
+    log(state.toString());
+    await _authRepo.signOut();
+    state = const UserInitial();
+    log(state.toString());
   }
 }

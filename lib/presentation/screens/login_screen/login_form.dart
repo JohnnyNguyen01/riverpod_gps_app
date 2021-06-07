@@ -43,7 +43,9 @@ class _LoginFormState extends State<LoginForm> {
         } else if (userState is UserLoggedIn) {
           return progressIndicator;
         } else if (userState is UserError) {
-          return progressIndicator;
+          return _SubmitButton(
+            onPressed: () => onPressed(),
+          );
         } else {
           return _SubmitButton(
             onPressed: () => onPressed(),

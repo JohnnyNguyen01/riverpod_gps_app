@@ -8,12 +8,15 @@ class PetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        _BuildCard(deviceSize: _deviceSize),
-        const _BuildPetPhoto(),
-      ],
+    return Positioned(
+      bottom: 10,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          _BuildCard(deviceSize: _deviceSize),
+          const _BuildPetPhoto(),
+        ],
+      ),
     );
   }
 }

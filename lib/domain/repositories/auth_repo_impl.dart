@@ -23,7 +23,7 @@ class FirebaseAuthImpl implements AuthRepository {
   @override
   Future<void> signOut() async {
     try {
-      _authInstance.signOut();
+      await _authInstance.signOut();
     } on FirebaseAuthException catch (e) {
       throw Failure(code: e.code, message: e.message);
     }

@@ -36,7 +36,10 @@ class LoginScreenController {
       try {
         await _read(userStateProvider.notifier)
             .loginuser(email: email, password: password, name: "");
-        Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
+        final userState = _read(userStateProvider);
+        if (userState is UserLoggedIn) {
+          Navigator.of(scaffoldContext).pushNamed(HomeScreen.routeName);
+        }
       } on Failure catch (e) {
         ScaffoldMessenger.of(scaffoldContext)
             .showSnackBar(Snackbars.displayErrorSnackbar(e.message!));
