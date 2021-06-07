@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/states/marker_list_state_notifier.dart';
+import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -18,21 +20,21 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
-    //todo: fix this shit, it's breaking stuff
-    // context.read(markerListStateProvider.notifier).updateLatestPetMarker();
+    //todo: fix this shit, it's breaking stuff -> _petStream apparently null
+    context.read(markerListStateProvider.notifier).setLatestMarkerSet();
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
-        final markerListState = watch(markerListStateProvider);
         final userState = watch(userStateProvider);
+        final markerListState = watch(markerListStateProvider);
+        final petCoordList = watch(petCoordinateProvider);
+
         return GoogleMap(
           mapType: MapType.normal,
-          markers: markerListState is MarkerSet
-              ? markerListState.markerSet
-              : <Marker>{},
+          markers: petCoordList.data!.value,
           //todo: should maybe point to Tarzan?
           initialCameraPosition: CameraPosition(
             target: userState is UserLoggedIn

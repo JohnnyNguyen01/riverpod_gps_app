@@ -30,6 +30,5 @@ class HomeScreenController {
 
   void initFunctions() async {
     requestGpsPermissions();
-    log(_read(markerListStateProvider).toString());
   }
 }
