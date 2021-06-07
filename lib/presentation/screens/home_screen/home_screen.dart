@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
         HomeMap(),
         PetCard(),
         _BuildNavDrawerButton(),
-        _TestStreamBtn()
       ]),
     );
   }
@@ -51,18 +50,6 @@ class _BuildNavDrawerButton extends StatelessWidget {
         icon: const Icon(Icons.menu),
         onPressed: () => Scaffold.of(context).openDrawer(),
       ),
-    );
-  }
-}
-
-class _TestStreamBtn extends ConsumerWidget {
-  const _TestStreamBtn({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final petStream = watch(petCoordinateProvider);
-    return SafeArea(
-      child: ElevatedButton(child: const Text('Test stream'), onPressed: () {}),
     );
   }
 }
