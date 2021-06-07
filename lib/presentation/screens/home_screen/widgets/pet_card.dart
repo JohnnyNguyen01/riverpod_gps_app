@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/utils/assets.dart';
 
 class PetCard extends StatelessWidget {
@@ -51,7 +53,7 @@ class _BuildPetPhoto extends StatelessWidget {
   }
 }
 
-class _BuildCard extends StatelessWidget {
+class _BuildCard extends ConsumerWidget {
   const _BuildCard({
     Key? key,
     required Size deviceSize,
@@ -61,7 +63,8 @@ class _BuildCard extends StatelessWidget {
   final Size _deviceSize;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final petCoordinate = watch(petCoordinateProvider);
     return Container(
       width: _deviceSize.width,
       padding: const EdgeInsets.symmetric(horizontal: 10),

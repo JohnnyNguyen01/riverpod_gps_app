@@ -47,4 +47,9 @@ class FirebaseAuthImpl implements AuthRepository {
       throw Failure(code: e.code, message: e.message!);
     }
   }
+
+  @override
+  Stream<User?> getAuthStateStream() {
+    return _authInstance.authStateChanges();
+  }
 }
