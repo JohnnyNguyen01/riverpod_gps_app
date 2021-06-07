@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pet_tracker_youtube/states/marker_list_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
@@ -20,8 +19,6 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
-    //todo: fix this shit, it's breaking stuff -> _petStream apparently null
-    context.read(markerListStateProvider.notifier).setLatestMarkerSet();
   }
 
   @override
@@ -29,26 +26,36 @@ class _HomeMapState extends State<HomeMap> {
     return Consumer(
       builder: (context, watch, child) {
         final userState = watch(userStateProvider);
-        final markerListState = watch(markerListStateProvider);
         final petCoordList = watch(petCoordinateProvider);
 
-        return GoogleMap(
-          mapType: MapType.normal,
-          markers: petCoordList.data!.value,
-          //todo: should maybe point to Tarzan?
-          initialCameraPosition: CameraPosition(
-            target: userState is UserLoggedIn
-                ? userState.user.location
-                : const LatLng(-33.926870, 150.859040),
-            zoom: 14.4746,
-          ),
-          rotateGesturesEnabled: true,
-          myLocationButtonEnabled: true,
-          myLocationEnabled: true,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        );
+        return petCoordList.when(
+            data: (markers) {
+              return GoogleMap(
+                mapType: MapType.normal,
+                markers: markers,
+                //todo: should maybe point to Tarzan?
+                initialCameraPosition: CameraPosition(
+                  target: userState is UserLoggedIn
+                      ? userState.user.location
+                      : const LatLng(-33.926870, 150.859040),
+                  zoom: 14.4746,
+                ),
+                rotateGesturesEnabled: true,
+                myLocationButtonEnabled: true,
+                myLocationEnabled: true,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              );
+            },
+            loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+            error: (err, stack) {
+              return Center(
+                child: Text("An Error has occured: ${err.toString()}"),
+              );
+            });
       },
     );
   }
