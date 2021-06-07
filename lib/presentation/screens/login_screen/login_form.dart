@@ -43,7 +43,9 @@ class _LoginFormState extends State<LoginForm> {
         } else if (userState is UserLoggedIn) {
           return progressIndicator;
         } else if (userState is UserError) {
-          return progressIndicator;
+          return _SubmitButton(
+            onPressed: () => onPressed(),
+          );
         } else {
           return _SubmitButton(
             onPressed: () => onPressed(),
@@ -91,7 +93,7 @@ class _SubmitButton extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         child: const Text(
-          'Sign Up',
+          'Login',
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,

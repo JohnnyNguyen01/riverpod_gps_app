@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
@@ -10,19 +12,22 @@ class DeviceGps {
   ///Requqest device permission, run at start of app.
   Future<void> requestDevicePermissions() async {
     var permission = await Geolocator.checkPermission();
+    log(permission.toString());
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
-      return;
+      null;
     }
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       permission == LocationPermission.denied
-          ? Future.error("Permissions were denied")
+          ? throw Failure(code: "", message: "Permissions were denied")
           : null;
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          "Location permissions are permanently denied. We are unabled to request permssion.");
+      throw Failure(
+          code: "",
+          message:
+              "Location permissions are permanently denied. We are unabled to request permssion.");
     }
   }
 

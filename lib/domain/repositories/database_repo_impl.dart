@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
@@ -22,16 +24,26 @@ class DatabaseRepoImplementation implements DatabaseRepository {
         _read = read;
 
   @override
-  Stream<PetCoordinate> getPetGpsCoordinatesAsBroadcastStream() async* {
-    final _petCoordinateStream = _db
-        .collection('PiCoordinates')
-        .orderBy('date-time')
-        .snapshots()
-        .asBroadcastStream();
-    for (final querySnapshot in await _petCoordinateStream.toList()) {
-      for (final doc in querySnapshot.docs) {
-        yield PetCoordinate.fromFirestore(doc.data());
-      }
+  Stream<List<PetCoordinate>> getPetGpsCoordinatesAsBroadcastStream() {
+    try {
+      final dbStream = _db
+          .collection('PiCoordinates')
+          .orderBy('date-time', descending: true)
+          .snapshots()
+          .asBroadcastStream();
+
+      Stream<List<PetCoordinate>> coordStream = dbStream.map((snapshot) {
+        List<PetCoordinate> coordinateList = [];
+        snapshot.docs.forEach(
+          (doc) => coordinateList.add(
+            PetCoordinate.fromFirestore(doc.data()),
+          ),
+        );
+        return coordinateList;
+      });
+      return coordStream;
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
     }
   }
 
