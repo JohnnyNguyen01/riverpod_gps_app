@@ -24,16 +24,12 @@ class HomeScreenController {
   void requestGpsPermissions() async =>
       await _gpsRepo.requestDevicePermissions();
 
-  void setUserCurrentLocation() =>
-      _read(userStateProvider.notifier).setUserLatLng();
-
   void openNavDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
   }
 
   void initFunctions() async {
     requestGpsPermissions();
-    setUserCurrentLocation();
     log(_read(markerListStateProvider).toString());
   }
 }

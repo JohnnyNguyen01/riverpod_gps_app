@@ -18,7 +18,8 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
-    context.read(markerListStateProvider.notifier).updateLatestPetMarker();
+    //todo: fix this shit, it's breaking stuff
+    // context.read(markerListStateProvider.notifier).updateLatestPetMarker();
   }
 
   @override

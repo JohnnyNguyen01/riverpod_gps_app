@@ -106,6 +106,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
       required String password}) async {
     try {
       state = const UserLoggingIn();
+      log(state.toString());
       final userPos = await _gpsRepo.getDevicePosition();
       final userLatLng = LatLng(userPos.latitude, userPos.longitude);
       await _authRepo.signupWithEmailAndPassword(email, password);
@@ -116,6 +117,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
           location: userLatLng,
           uid: _authRepo.getUser()!.uid);
       state = UserLoggedIn(user: user);
+      log(state.toString());
       //add new doc to firestore
       await _dbRepo.addNewUser(user: user);
       log("User Signed Up Successfully: ${user.toString()}");
@@ -124,17 +126,6 @@ class UserStateNotifier extends StateNotifier<UserState> {
       log(state.toString());
       throw Failure(code: e.code, message: e.message!);
     }
-  }
-
-  ///Set the user's location [LatLng] to their current location.
-  void setUserLatLng() async {
-    // try {
-    //   final currentLocation = await _gpsRepo.getDevicePosition();
-    //   state =
-    //   print("current user is ${state.toString()}");
-    // } catch (e) {
-    //   throw Failure(code: "", message: e.toString());
-    // }
   }
 
   ///logout the current usedr
