@@ -41,7 +41,7 @@ class _HomeMapState extends State<HomeMap> {
                   zoom: 14.4746,
                 ),
                 rotateGesturesEnabled: true,
-                myLocationButtonEnabled: true,
+                myLocationButtonEnabled: false,
                 myLocationEnabled: true,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
@@ -63,5 +63,6 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void dispose() {
     super.dispose();
+    _controller.future.then((value) => value.dispose());
   }
 }

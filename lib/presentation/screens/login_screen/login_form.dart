@@ -93,7 +93,7 @@ class _SubmitButton extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         child: const Text(
-          'Sign Up',
+          'Login',
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
