@@ -9,4 +9,6 @@ abstract class AuthRepository {
   Future<void> signOut() async {}
 
   User? getUser() {}
+
+  Stream getAuthStateStream();
 }
