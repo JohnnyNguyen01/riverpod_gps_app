@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/utils/assets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class PetCard extends StatelessWidget {
   const PetCard({Key? key}) : super(key: key);
@@ -64,7 +69,6 @@ class _BuildCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final petCoordinate = watch(petCoordinateProvider);
     return Container(
       width: _deviceSize.width,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -84,32 +88,9 @@ class _BuildCard extends ConsumerWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_pin,
-                    color: Colors.orange.shade200,
-                  ),
-                  petCoordinate.when(
-                    data: (data) => Text(
-                        "lat: ${data.coordinate.latitude} long: ${data.coordinate.longitude}"),
-                    //todo: spinner kit animation
-                    loading: () => const Text('loading'),
-                    error: (err, stck) => Text(err.toString()),
-                  ) //const Text("-33.87213, 151,209832")
-                ],
-              ),
+              const _BuildLatLngButton(),
               const SizedBox(height: 5),
-              Row(
-                // ignore: prefer_const_literals_to_create_immutables
-                children: [
-                  const Icon(
-                    Icons.directions_walk,
-                    color: Color(0xFF8ACAC0),
-                  ),
-                  const Text("1.0Km away"),
-                ],
-              ),
+              const _BuildDIrectionsRowButton(),
               const SizedBox(height: 5),
               Row(
                 children: [
@@ -125,7 +106,7 @@ class _BuildCard extends ConsumerWidget {
                     color: Colors.orange.shade200,
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -137,6 +118,7 @@ class _BuildCard extends ConsumerWidget {
 /* 
 * Custom Buttons For Card
 */
+
 class PetCardButton extends StatelessWidget {
   final String text;
   final Function() onPressed;
@@ -160,6 +142,77 @@ class PetCardButton extends StatelessWidget {
         style: const TextStyle(color: Colors.black),
       ),
       onPressed: onPressed,
+    );
+  }
+}
+
+/*
+* LatLng Row Btn 
+*/
+
+class _BuildLatLngButton extends ConsumerWidget {
+  const _BuildLatLngButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final petCoordinate = watch(petCoordinateProvider);
+    return InkWell(
+      //todo: Not sure if architecturally sound, need to revisit and refactor
+      //also need to move into controller class.
+      onTap: () async {
+        final latestCoord = petCoordinate.data?.value.coordinate;
+        log('latest Coord pressed. lates coord: ${latestCoord.toString()}');
+        if (latestCoord != null) {
+          final newTarget = LatLng(latestCoord.latitude, latestCoord.longitude);
+          await context
+              .read(homeMapControllerProvider)
+              .setCameraToNewPosition(target: newTarget);
+        }
+      },
+      onLongPress: () {},
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.location_pin,
+            color: Colors.orange.shade200,
+          ),
+          petCoordinate.when(
+            data: (data) => Text(
+                "lat: ${data.coordinate.latitude} long: ${data.coordinate.longitude}"),
+            loading: () => SpinKitThreeBounce(color: Colors.orange.shade200),
+            error: (err, stck) => Text(err.toString()),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+/*
+ * Directions Row Button
+ */
+
+class _BuildDIrectionsRowButton extends ConsumerWidget {
+  const _BuildDIrectionsRowButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    return InkWell(
+      onTap: () {},
+      onLongPress: () {},
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+
+        // ignore: prefer_const_literals_to_create_immutables
+        children: [
+          const Icon(
+            Icons.directions_walk,
+            color: Color(0xFF8ACAC0),
+          ),
+          const Text("1.0Km away"),
+        ],
+      ),
     );
   }
 }

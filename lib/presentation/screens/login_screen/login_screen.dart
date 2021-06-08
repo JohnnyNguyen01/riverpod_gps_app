@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/presentation/screens/login_screen/login_screen_controller.dart';
-import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
 import 'login_form.dart';
 
@@ -24,7 +23,6 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final _pageController = watch(loginScreenControllerProvider);
-    final _userState = watch(userStateProvider);
 
     return Scaffold(
       body: SafeArea(
