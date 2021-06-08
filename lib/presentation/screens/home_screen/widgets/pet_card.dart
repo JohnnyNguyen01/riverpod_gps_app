@@ -90,7 +90,13 @@ class _BuildCard extends ConsumerWidget {
                     Icons.location_pin,
                     color: Colors.orange.shade200,
                   ),
-                  const Text("-33.87213, 151,209832")
+                  petCoordinate.when(
+                    data: (data) => Text(
+                        "lat: ${data.coordinate.latitude} long: ${data.coordinate.longitude}"),
+                    //todo: spinner kit animation
+                    loading: () => const Text('loading'),
+                    error: (err, stck) => Text(err.toString()),
+                  ) //const Text("-33.87213, 151,209832")
                 ],
               ),
               const SizedBox(height: 5),
