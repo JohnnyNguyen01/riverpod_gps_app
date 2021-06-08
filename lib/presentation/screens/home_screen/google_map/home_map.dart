@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pet_tracker_youtube/states/maps_marker_set.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 
@@ -27,12 +28,15 @@ class _HomeMapState extends State<HomeMap> {
       builder: (context, watch, child) {
         final userState = watch(userStateProvider);
         final petCoordList = watch(petCoordinateProvider);
+        final mapMarkerState = watch(mapsMarkerStateNotifierProvider);
 
         return petCoordList.when(
             data: (markers) {
               return GoogleMap(
                 mapType: MapType.normal,
-                markers: markers,
+                markers: mapMarkerState is MapsMarkerSet
+                    ? mapMarkerState.markerSet
+                    : {},
                 //todo: should maybe point to Tarzan?
                 initialCameraPosition: CameraPosition(
                   target: userState is UserLoggedIn
