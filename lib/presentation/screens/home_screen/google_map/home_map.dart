@@ -42,6 +42,7 @@ class _HomeMapState extends State<HomeMap> {
                 rotateGesturesEnabled: true,
                 myLocationButtonEnabled: false,
                 myLocationEnabled: true,
+                polylines: {},
                 onMapCreated: (GoogleMapController controller) {
                   homeMapController.googleMapController.complete(controller);
                 },
