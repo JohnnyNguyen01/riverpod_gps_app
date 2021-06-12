@@ -8,7 +8,7 @@ import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/custom_drawer.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
-import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
+import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 import 'google_map/home_map.dart';
 
@@ -93,23 +93,21 @@ class _BuildCurentPositionButton extends StatelessWidget {
  */
 
 class TestBtn extends ConsumerWidget {
-  const TestBtn({Key? key}) : super();
+  const TestBtn({Key? key});
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return SafeArea(
-      child:
-          // ElevatedButton(onPressed: () {}, child: const Text('test distance api')));
-          TextButton(
+      child: TextButton(
         onPressed: () async {
-          final user = watch(userStateProvider);
-          final location = user is UserLoggedIn
-              ? user.user.location
-              : const LatLng(-35.12, 142);
-          const pet = LatLng(-33.865143, 151.209900);
-          final directions = await context
-              .read(directionsRepoProvider)
-              .getDirections(origin: location, destination: pet);
+          await context
+              .read(mapDirectionsStateNotifierProvider.notifier)
+              .setNewDirections();
+          final mapDirectionsState =
+              context.read(mapDirectionsStateNotifierProvider);
+          mapDirectionsState is MapDirectionsLoaded
+              ? log(mapDirectionsState.directions.toString())
+              : log('error with state');
         },
         child: const Text('Test distance api'),
       ),

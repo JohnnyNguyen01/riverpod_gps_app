@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:convert' as json;
 
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -46,7 +45,7 @@ class DirectionsRepositoryImplementation implements DirectionsRepository {
         Map<String, dynamic> responseBody = response.data['routes'][0];
         // log(responseBody['bounds']['northeast']['lat'].toString());
         Directions? newDirection = Directions.fromMap(map: responseBody);
-        log(newDirection!.polylinePoints.toString());
+        return newDirection;
       }
     } catch (e) {
       throw Failure(code: '', message: e.toString());

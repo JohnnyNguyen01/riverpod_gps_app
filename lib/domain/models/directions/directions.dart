@@ -39,4 +39,9 @@ class Directions {
         totalDistance: distance,
         totalDuration: duration);
   }
+
+  @override
+  String toString() {
+    return "directions: bounds: $bounds polyPoints: $polylinePoints totalDistance: $totalDistance totalDuration: $totalDuration ";
+  }
 }

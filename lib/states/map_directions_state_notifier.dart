@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
@@ -5,6 +7,7 @@ import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart
 import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
 import 'package:pet_tracker_youtube/states/maps_marker_set.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
+
 /*
 * State Notifier Provider 
 */
@@ -34,7 +37,7 @@ class MapDirectionsLoading extends MapDirectionsStates {
 }
 
 class MapDirectionsLoaded extends MapDirectionsStates {
-  Directions directions;
+  Directions? directions;
   MapDirectionsLoaded({required this.directions});
 }
 
@@ -58,7 +61,7 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
     try {
       // -- set state to loading --
       state = const MapDirectionsLoading();
-
+      log(state.toString());
       // --create new map directions --
       //set origin to user state origin
       final userState = _read(userStateProvider);
@@ -87,7 +90,9 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
       final directions = await _directionsRepo.getDirections(
           origin: origin, destination: destination);
       // -- set state to loaded --
-      state = MapDirectionsLoaded(directions: directions!);
+      state = MapDirectionsLoaded(directions: directions);
+
+      log(state.toString());
     } on Failure catch (e) {
       throw Failure(code: "", message: e.message);
     }
