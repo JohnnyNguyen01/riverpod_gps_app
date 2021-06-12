@@ -2,14 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pet_tracker_youtube/domain/repositories/directions_repo_impl.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/custom_drawer.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
-import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 import 'google_map/home_map.dart';
 
 // ignore: use_key_in_widget_constructors

@@ -1,10 +1,8 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
+import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/maps_marker_set.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
@@ -24,6 +22,7 @@ class _HomeMapState extends State<HomeMap> {
         final petCoordList = watch(petCoordinateProvider);
         final mapMarkerState = watch(mapsMarkerStateNotifierProvider);
         final homeMapController = watch(homeMapControllerProvider);
+        final mapDirectionsState = watch(mapDirectionsStateNotifierProvider);
 
         return petCoordList.when(
             data: (markers) {
@@ -42,7 +41,18 @@ class _HomeMapState extends State<HomeMap> {
                 rotateGesturesEnabled: true,
                 myLocationButtonEnabled: false,
                 myLocationEnabled: true,
-                polylines: {},
+                polylines: mapDirectionsState is MapDirectionsLoaded
+                    ? {
+                        Polyline(
+                          polylineId: const PolylineId("device_to_petGps"),
+                          color: Colors.orange.shade200,
+                          width: 3,
+                          points: mapDirectionsState.directions.polylinePoints
+                              .map((e) => LatLng(e.latitude, e.longitude))
+                              .toList(),
+                        )
+                      }
+                    : {},
                 onMapCreated: (GoogleMapController controller) {
                   homeMapController.googleMapController.complete(controller);
                 },

@@ -37,7 +37,7 @@ class MapDirectionsLoading extends MapDirectionsStates {
 }
 
 class MapDirectionsLoaded extends MapDirectionsStates {
-  Directions? directions;
+  Directions directions;
   MapDirectionsLoaded({required this.directions});
 }
 
@@ -57,6 +57,9 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
   final DirectionsRepository _directionsRepo;
   final Reader _read;
 
+  ///Set the latest directions between the current device and the latest pet
+  ///gps coordinate.
+  //todo: refactor to 1 try - catch statement
   Future<void> setNewDirections() async {
     try {
       // -- set state to loading --
@@ -77,7 +80,6 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
       }
 
       //set destination to latest stream provider destination
-      //todo: see if there's a better way of doing this in order to fit null safety
       LatLng destination = const LatLng(0, 0);
       final currentMarkeState = _read(mapsMarkerStateNotifierProvider);
       try {
@@ -90,9 +92,7 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
       final directions = await _directionsRepo.getDirections(
           origin: origin, destination: destination);
       // -- set state to loaded --
-      state = MapDirectionsLoaded(directions: directions);
-
-      log(state.toString());
+      state = MapDirectionsLoaded(directions: directions!);
     } on Failure catch (e) {
       throw Failure(code: "", message: e.message);
     }
