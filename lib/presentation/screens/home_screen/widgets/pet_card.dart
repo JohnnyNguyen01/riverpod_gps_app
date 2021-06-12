@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
+import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/utils/assets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -198,6 +199,8 @@ class _BuildDIrectionsRowButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final mapDirectionsState = watch(mapDirectionsStateNotifierProvider);
+
     return InkWell(
       onTap: () {},
       onLongPress: () {},
@@ -210,7 +213,12 @@ class _BuildDIrectionsRowButton extends ConsumerWidget {
             Icons.directions_walk,
             color: Color(0xFF8ACAC0),
           ),
-          const Text("1.0Km away"),
+          if (mapDirectionsState is MapDirectionsLoaded)
+            Text(mapDirectionsState.directions.totalDistance + " away")
+          else if (mapDirectionsState is MapDirectionsLoading)
+            const Text("Loading...")
+          else if (mapDirectionsState is InitialState)
+            const Text("Loading")
         ],
       ),
     );
