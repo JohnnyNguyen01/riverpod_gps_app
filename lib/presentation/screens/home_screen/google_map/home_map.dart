@@ -45,8 +45,8 @@ class _HomeMapState extends State<HomeMap> {
                     ? {
                         Polyline(
                           polylineId: const PolylineId("device_to_petGps"),
-                          color: Colors.orange.shade200,
-                          width: 3,
+                          color: const Color(0xFF8ACAC0),
+                          width: 4,
                           points: mapDirectionsState.directions.polylinePoints
                               .map((e) => LatLng(e.latitude, e.longitude))
                               .toList(),

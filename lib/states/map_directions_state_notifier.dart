@@ -60,7 +60,7 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
   ///Set the latest directions between the current device and the latest pet
   ///gps coordinate.
   //todo: refactor to 1 try - catch statement
-  Future<void> setNewDirections() async {
+  Future<void> setNewDirections({required String travelMode}) async {
     try {
       // -- set state to loading --
       state = const MapDirectionsLoading();
@@ -90,7 +90,7 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
         throw Failure(code: "", message: e.toString());
       }
       final directions = await _directionsRepo.getDirections(
-          origin: origin, destination: destination);
+          origin: origin, destination: destination, travelMode: travelMode);
       // -- set state to loaded --
       state = MapDirectionsLoaded(directions: directions!);
     } on Failure catch (e) {

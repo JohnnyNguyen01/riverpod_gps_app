@@ -99,7 +99,7 @@ class TestBtn extends ConsumerWidget {
         onPressed: () async {
           await context
               .read(mapDirectionsStateNotifierProvider.notifier)
-              .setNewDirections();
+              .setNewDirections(travelMode: "Walking");
           final mapDirectionsState =
               context.read(mapDirectionsStateNotifierProvider);
           mapDirectionsState is MapDirectionsLoaded

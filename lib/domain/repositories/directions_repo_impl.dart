@@ -31,13 +31,16 @@ class DirectionsRepositoryImplementation implements DirectionsRepository {
   //todo: Should return Directions
   @override
   Future<Directions?> getDirections(
-      {required LatLng origin, required LatLng destination}) async {
+      {required LatLng origin,
+      required LatLng destination,
+      required String travelMode}) async {
     try {
       final response = await _dio.get(
         _baseURL,
         queryParameters: {
           'origin': '${origin.latitude},${origin.longitude}',
           'destination': '${destination.latitude},${destination.longitude}',
+          'mode': travelMode,
           'key': googleApiKey
         },
       );
