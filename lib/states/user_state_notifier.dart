@@ -94,7 +94,7 @@ class UserStateNotifier extends StateNotifier<UserState> {
     } on FirebaseAuthException catch (e) {
       state = UserError(error: e.message!);
       throw Failure(code: e.code, message: e.message);
-    }
+    } //todo add other failures
   }
 
   ///Sign's up a new user to Firebase, and creates a new document in `Users`

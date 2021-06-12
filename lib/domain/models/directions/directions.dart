@@ -14,14 +14,7 @@ class Directions {
       required this.totalDuration});
 
   static Directions? fromMap({required Map<String, dynamic> map}) {
-    //todo: find null safe way to implement this.
-    // if ((map['routes'] as List).isEmpty) return null;
-
-    //route information
-    // final data = map['routes'][0];
-
     //bounds
-    //todo: eg: change to LatLng(northeast['lat'], northeast['long'])
     final northEast = LatLng(
         map['bounds']['northeast']['lat'], map['bounds']['northeast']['lng']);
     final southWest = LatLng(

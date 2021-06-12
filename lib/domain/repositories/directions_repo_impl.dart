@@ -30,24 +30,23 @@ class DirectionsRepositoryImplementation implements DirectionsRepository {
   DirectionsRepositoryImplementation({Dio? dio}) : _dio = dio ?? Dio();
 
   //todo: Should return Directions
-  Future<dynamic> getDirections(
+  @override
+  Future<Directions?> getDirections(
       {required LatLng origin, required LatLng destination}) async {
-    final response = await _dio.get(
-      _baseURL,
-      queryParameters: {
-        'origin': '${origin.latitude},${origin.longitude}',
-        'destination': '${destination.latitude},${destination.longitude}',
-        'key': googleApiKey
-      },
-    );
-    Map<String, dynamic> responseBody = response.data['routes'][0];
-    // log(responseBody['bounds']['northeast']['lat'].toString());
-    Directions? newDirection = Directions.fromMap(map: responseBody);
-    log(newDirection!.polylinePoints.toString());
     try {
+      final response = await _dio.get(
+        _baseURL,
+        queryParameters: {
+          'origin': '${origin.latitude},${origin.longitude}',
+          'destination': '${destination.latitude},${destination.longitude}',
+          'key': googleApiKey
+        },
+      );
       if (response.statusCode == 200) {
-        // return Directions.fromMap(map: response.data);
-        response.data;
+        Map<String, dynamic> responseBody = response.data['routes'][0];
+        // log(responseBody['bounds']['northeast']['lat'].toString());
+        Directions? newDirection = Directions.fromMap(map: responseBody);
+        log(newDirection!.polylinePoints.toString());
       }
     } catch (e) {
       throw Failure(code: '', message: e.toString());
