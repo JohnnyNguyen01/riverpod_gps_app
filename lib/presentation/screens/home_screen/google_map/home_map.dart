@@ -33,6 +33,7 @@ class _HomeMapState extends State<HomeMap> {
                     : {},
                 //todo: should maybe point to Tarzan?
                 initialCameraPosition: CameraPosition(
+                  // tilt: 45.0,
                   target: userState is UserLoggedIn
                       ? userState.user.location
                       : const LatLng(-33.926870, 150.859040),

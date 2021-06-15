@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/directions_request_dialog_box.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:pet_tracker_youtube/utils/assets.dart';
@@ -21,7 +22,10 @@ class PetCard extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          _BuildCard(deviceSize: _deviceSize),
+          _BuildCard(
+            deviceSize: _deviceSize,
+            scaffoldContext: context,
+          ),
           const _BuildPetPhoto(),
         ],
       ),
@@ -62,11 +66,13 @@ class _BuildPetPhoto extends StatelessWidget {
 class _BuildCard extends ConsumerWidget {
   const _BuildCard({
     Key? key,
+    required this.scaffoldContext,
     required Size deviceSize,
   })  : _deviceSize = deviceSize,
         super(key: key);
 
   final Size _deviceSize;
+  final BuildContext scaffoldContext;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -97,7 +103,11 @@ class _BuildCard extends ConsumerWidget {
                 children: [
                   PetCardButton(
                     text: 'Directions',
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: scaffoldContext,
+                          builder: (ctx) => const DirectionsRequestDialogBox());
+                    },
                     color: const Color(0xFF8ACAC0),
                   ),
                   const SizedBox(width: 5),
