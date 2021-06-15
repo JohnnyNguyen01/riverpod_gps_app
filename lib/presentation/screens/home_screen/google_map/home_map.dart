@@ -47,7 +47,11 @@ class _HomeMapState extends State<HomeMap> {
                         Polyline(
                           polylineId: const PolylineId("device_to_petGps"),
                           color: const Color(0xFF8ACAC0),
-                          width: 4,
+                          width: 5,
+                          patterns: [
+                            //todo: change so that dotted on walking, solid on driving
+                            PatternItem.gap(10), PatternItem.dot
+                          ],
                           points: mapDirectionsState.directions.polylinePoints
                               .map((e) => LatLng(e.latitude, e.longitude))
                               .toList(),

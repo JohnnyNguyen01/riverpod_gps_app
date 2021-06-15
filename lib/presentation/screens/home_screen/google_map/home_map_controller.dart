@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_tracker_youtube/device/device.dart';
+import 'package:pet_tracker_youtube/domain/models/models.dart';
 
 /*
  * Controller Provider 
@@ -40,5 +41,22 @@ class HomeMapController {
     final deviceLatLng =
         LatLng(devicePosition.latitude, devicePosition.longitude);
     await setCameraToNewPosition(target: deviceLatLng);
+  }
+
+  ///Animate camera for navigation with tilt and what not
+  Future<void> setCameraToUserNaviagtion() async {
+    try {
+      final mapController = await _googleMapController.future;
+      final deviceRepo = _read(deviceGpsRepoProvider);
+      final devicePosition = await deviceRepo.getDevicePosition();
+      final deviceLatLng =
+          LatLng(devicePosition.latitude, devicePosition.longitude);
+      final newPos = CameraUpdate.newCameraPosition(
+        CameraPosition(target: deviceLatLng, tilt: 45, zoom: 20.0, bearing: 90),
+      );
+      mapController.animateCamera(newPos);
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
   }
 }

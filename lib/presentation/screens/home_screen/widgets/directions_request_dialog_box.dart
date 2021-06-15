@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 
 class DirectionsRequestDialogBox extends StatefulWidget {
@@ -29,10 +30,11 @@ class _DirectionsRequestDialogBoxState
     });
   }
 
-  void handleStartNavigationBtn() async {
+  handleStartNavigationBtn() async {
     await context
         .read(mapDirectionsStateNotifierProvider.notifier)
         .setNewDirections(travelMode: drivingSet ? "driving" : "walking");
+    await context.read(homeMapControllerProvider).setCameraToUserNaviagtion();
     Navigator.of(context).pop();
   }
 
@@ -66,7 +68,7 @@ class _DirectionsRequestDialogBoxState
           onPressed: () => Navigator.of(context).pop(),
         ),
         ElevatedButton(
-          onPressed: handleStartNavigationBtn,
+          onPressed: () async => await handleStartNavigationBtn(),
           child: const Text('Start Navigation'),
         ),
       ],
