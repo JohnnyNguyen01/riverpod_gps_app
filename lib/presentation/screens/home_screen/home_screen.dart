@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const PetCard(),
         const _BuildNavDrawerButton(),
         const _BuildCurentPositionButton(),
-        const TestBtn()
+        const DirectionsInfoContainer()
       ]),
     );
   }
@@ -85,29 +85,28 @@ class _BuildCurentPositionButton extends StatelessWidget {
 }
 
 /*
- * Test Btn 
- * Delete when testing is finished
+ * Directions  
+ * todo: Complete this
  */
-
-class TestBtn extends ConsumerWidget {
-  const TestBtn({Key? key});
+class DirectionsInfoContainer extends ConsumerWidget {
+  const DirectionsInfoContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    return SafeArea(
-      child: TextButton(
-        onPressed: () async {
-          await context
-              .read(mapDirectionsStateNotifierProvider.notifier)
-              .setNewDirections(travelMode: "Walking");
-          final mapDirectionsState =
-              context.read(mapDirectionsStateNotifierProvider);
-          mapDirectionsState is MapDirectionsLoaded
-              ? log(mapDirectionsState.directions.toString())
-              : log('error with state');
-        },
-        child: const Text('Test distance api'),
-      ),
-    );
+    final directionsState = watch(mapDirectionsStateNotifierProvider);
+    if (directionsState is MapDirectionsLoaded) {
+      final state = directionsState.directions;
+      //parse html string
+      String removeAllHtmlTags(String htmlText) {
+        RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+        return htmlText.replaceAll(exp, '');
+      }
+
+      return Card(
+        child: Text(removeAllHtmlTags(state.steps[0].htmlInstructions)),
+      );
+    } else {
+      return Container();
+    }
   }
 }
