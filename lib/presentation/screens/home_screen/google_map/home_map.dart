@@ -44,22 +44,7 @@ class _HomeMapState extends State<HomeMap> {
                 rotateGesturesEnabled: true,
                 myLocationButtonEnabled: false,
                 myLocationEnabled: true,
-                polylines: mapDirectionsState is MapDirectionsLoaded
-                    ? {
-                        Polyline(
-                          polylineId: const PolylineId("device_to_petGps"),
-                          color: const Color(0xFF8ACAC0),
-                          width: 5,
-                          patterns: [
-                            //todo: change so that dotted on walking, solid on driving
-                            PatternItem.gap(10), PatternItem.dot
-                          ],
-                          points: mapDirectionsState.directions.polylinePoints
-                              .map((e) => LatLng(e.latitude, e.longitude))
-                              .toList(),
-                        )
-                      }
-                    : {},
+                polylines: _buildPolyline(mapDirectionsState),
                 onTap: (latLng) {
                   log(latLng.toString());
                 },
@@ -78,5 +63,26 @@ class _HomeMapState extends State<HomeMap> {
             });
       },
     );
+  }
+
+  Set<Polyline> _buildPolyline(MapDirectionsStates mapDirectionsState) {
+    if (mapDirectionsState is MapDirectionsLoaded) {
+      return {
+        Polyline(
+          polylineId: const PolylineId("device_to_petGps"),
+          color: const Color(0xFF8ACAC0),
+          width: 5,
+          patterns: [
+            //todo: change so that dotted on walking, solid on driving
+            PatternItem.gap(10), PatternItem.dot
+          ],
+          points: mapDirectionsState.directions.polylinePoints
+              .map((e) => LatLng(e.latitude, e.longitude))
+              .toList(),
+        )
+      };
+    } else {
+      return {};
+    }
   }
 }
