@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -58,6 +60,9 @@ class _HomeMapState extends State<HomeMap> {
                         )
                       }
                     : {},
+                onTap: (latLng) {
+                  log(latLng.toString());
+                },
                 onMapCreated: (GoogleMapController controller) {
                   homeMapController.googleMapController.complete(controller);
                 },
