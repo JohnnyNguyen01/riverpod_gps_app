@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_tracker_youtube/domain/models/models.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/custom_drawer.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
+import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'google_map/home_map.dart';
 
@@ -31,14 +33,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CustomDrawer(),
-      body: Stack(children: [
-        HomeMap(),
-        const PetCard(),
-        const _BuildNavDrawerButton(),
-        const _BuildCurentPositionButton(),
-        const DirectionsInfoContainer()
-      ]),
+      body: _BuildWidgets(),
     );
+  }
+}
+
+/*
+ * build widgets according to state
+ * todo: This is dirty af, should change and refactor 
+ */
+
+class _BuildWidgets extends ConsumerWidget {
+  _BuildWidgets({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final geofenceState = watch(geofenceNotifierProvider);
+
+    return Stack(children: [
+      HomeMap(),
+      const _BuildNavDrawerButton(),
+      geofenceState is GeofenceAddLatLngMode
+          ? const GeofenceOptions()
+          : const PetCard(),
+      const _BuildCurentPositionButton(),
+      const DirectionsInfoContainer()
+    ]);
   }
 }
 
@@ -108,5 +128,45 @@ class DirectionsInfoContainer extends ConsumerWidget {
     } else {
       return Container();
     }
+  }
+}
+
+/*
+ * Geofence Options 
+ */
+class GeofenceOptions extends ConsumerWidget {
+  const GeofenceOptions();
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final deviceSize = MediaQuery.of(context).size;
+    final geofenceState = watch(geofenceNotifierProvider);
+
+    final fenceList =
+        geofenceState is GeofenceAddLatLngMode ? geofenceState.pointList : [];
+
+    return Positioned(
+      bottom: 20,
+      left: 5,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        // crossAxisAlignment:
+        children: [
+          Card(
+            child: SizedBox(
+              width: deviceSize.width * 0.9,
+              height: 120,
+              child: Text(fenceList.length.toString()),
+            ),
+          ),
+          ElevatedButton(
+            child: const Text('Add New Fence'),
+            onPressed: () {
+              context.read(homeScreenControllerProvider).handleAddNewFenceBtn();
+            },
+          )
+        ],
+      ),
+    );
   }
 }

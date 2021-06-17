@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 
 final homeScreenControllerProvider = Provider<HomeScreenController>((ref) {
   final gpsRepo = ref.read(deviceGpsRepoProvider);
@@ -28,5 +29,17 @@ class HomeScreenController {
 
   void initFunctions() async {
     requestGpsPermissions();
+  }
+
+  void handleAddNewFenceBtn() {
+    final geofenceNotifier = _read(geofenceNotifierProvider.notifier);
+    final geofenceState = _read(geofenceNotifierProvider);
+
+    if (geofenceState is GeofenceAddLatLngMode) {
+      geofenceNotifier.addNewFence(
+          id: "Test",
+          fencePoints: geofenceState.pointList,
+          data: {'home': 'test address @ address, NSW, 2817'});
+    }
   }
 }

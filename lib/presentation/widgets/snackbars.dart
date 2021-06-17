@@ -8,4 +8,15 @@ class Snackbars {
       duration: const Duration(seconds: 2),
     );
   }
+
+  static SnackBar genericSnackbar(
+      {required String text,
+      required Color backgroundColor,
+      required int duration}) {
+    return SnackBar(
+      content: Text(text),
+      backgroundColor: backgroundColor,
+      duration: Duration(seconds: duration),
+    );
+  }
 }
