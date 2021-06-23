@@ -83,4 +83,16 @@ class DatabaseRepoImplementation implements DatabaseRepository {
       throw Failure(code: "", message: e.toString());
     }
   }
+
+  @override
+  Future<void> removeGeoFence({required String userID}) async {
+    try {
+      _db
+          .collection(FirestorePaths().geofencesRootCollection)
+          .doc(userID)
+          .delete();
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
+  }
 }

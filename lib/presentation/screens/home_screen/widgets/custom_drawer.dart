@@ -36,8 +36,8 @@ class CustomDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.wrong_location_outlined),
             title: const Text('Remove all geofences'),
-            onTap: () {
-              geofenceStateNotifier.removeAllFences();
+            onTap: () async {
+              await geofenceStateNotifier.removeAllFences();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                   Snackbars.genericSnackbar(

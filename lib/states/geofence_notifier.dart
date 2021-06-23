@@ -93,7 +93,16 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
   //remove a fence
 
   //remove all fences
-  void removeAllFences() {
+  Future<void> removeAllFences() async {
+    late String uid;
+    final userState = _read(userStateProvider);
+    if (userState is UserLoggedIn) {
+      uid = userState.user.uid!;
+    } else {
+      state = GeofenceError(message: "Error grabbing User ID");
+      state = throw Failure(code: '', message: "Error grabbing userID");
+    }
+    await _db.removeGeoFence(userID: uid);
     state = const GeofenceInitial();
   }
 
