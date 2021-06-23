@@ -33,6 +33,19 @@ class CustomDrawer extends ConsumerWidget {
                       duration: 4));
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.wrong_location_outlined),
+            title: const Text('Remove all geofences'),
+            onTap: () {
+              geofenceStateNotifier.removeAllFences();
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  Snackbars.genericSnackbar(
+                      text: "All Geofences removed",
+                      backgroundColor: Colors.black,
+                      duration: 4));
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(

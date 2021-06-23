@@ -9,6 +9,7 @@ import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/cus
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
+import 'package:pet_tracker_youtube/states/stream_providers/geofence_list_stream_provider.dart';
 import 'google_map/home_map.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -140,10 +141,7 @@ class GeofenceOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final deviceSize = MediaQuery.of(context).size;
-    final geofenceState = watch(geofenceNotifierProvider);
-
-    final fenceList =
-        geofenceState is GeofenceAddLatLngMode ? geofenceState.pointList : [];
+    final fenceListStream = watch(geofenceListStreamProvider);
 
     return Positioned(
       bottom: 20,
@@ -156,7 +154,14 @@ class GeofenceOptions extends ConsumerWidget {
             child: SizedBox(
               width: deviceSize.width * 0.9,
               height: 120,
-              child: Text(fenceList.length.toString()),
+              child: fenceListStream.when(
+                  data: (data) => ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (_, index) {
+                        return Text(data[index].toString());
+                      }),
+                  loading: () => const CircularProgressIndicator(),
+                  error: (err, stck) {}),
             ),
           ),
           ElevatedButton(

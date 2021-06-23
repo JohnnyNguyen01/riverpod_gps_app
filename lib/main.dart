@@ -29,9 +29,11 @@ class MyApp extends ConsumerWidget {
       title: 'Flutter Demo',
       theme: Themes.primaryTheme,
       onGenerateRoute: CustomRouter.onGenerateRoute,
-      initialRoute: authStateStream.data?.value?.uid == null
-          ? SignupScreen.routeName
-          : HomeScreen.routeName,
+      initialRoute:
+          //todo: put back in after finished developing
+          authStateStream.data?.value?.uid == null
+              ? SignupScreen.routeName
+              : HomeScreen.routeName,
     );
   }
 }

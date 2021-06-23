@@ -73,8 +73,13 @@ class _HomeMapState extends State<HomeMap> {
                 myLocationEnabled: true,
                 polylines: _buildPolyline(mapDirectionsState),
                 polygons: _buildPolygons(),
-                onTap: (latLng) =>
-                    homeMapController.addLatLngToGeofence(latLng),
+                onTap: (latLng) {
+                  homeMapController.addLatLngToGeofence(
+                      point: latLng, context: context);
+                  //todo: Figure out how to change this, currently used to
+                  //set GeofenceUI Card List
+                  setState(() {});
+                },
                 onMapCreated: (GoogleMapController controller) {
                   homeMapController.googleMapController.complete(controller);
                 },

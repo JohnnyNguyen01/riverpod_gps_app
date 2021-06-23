@@ -60,4 +60,14 @@ class DatabaseRepoImplementation implements DatabaseRepository {
       throw Failure(code: "", message: e.toString());
     }
   }
+
+  @override
+  Future<void> addNewGeofence(
+      {required List fencePoints, required String userID}) async {
+    try {
+      final currentUser = _authRepo.getUser();
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
+  }
 }

@@ -190,7 +190,7 @@ class _BuildLatLngButton extends ConsumerWidget {
           ),
           petCoordinate.when(
             data: (data) => Text(
-                "lat: ${data.coordinate.latitude} long: ${data.coordinate.longitude}"),
+                "lat: ${data.coordinate.latitude.toStringAsFixed(4)} long: ${data.coordinate.longitude.toStringAsFixed(4)}"),
             loading: () => SpinKitThreeBounce(color: Colors.orange.shade200),
             error: (err, stck) => Text(err.toString()),
           )

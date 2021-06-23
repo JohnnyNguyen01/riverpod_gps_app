@@ -63,6 +63,11 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
 
   //remove a fence
 
+  //remove all fences
+  void removeAllFences() {
+    state = const GeofenceInitial();
+  }
+
   //set state to adding a new fence in order for user to be access fence select
   //widget
   void showAddFenceUI() {

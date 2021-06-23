@@ -9,4 +9,5 @@ class FirestorePaths {
 
   final piCoordinatesCollection = "PiCoordinates";
   final usersCollection = "Users";
+  final geofencesRootCollection = "Geofences";
 }
