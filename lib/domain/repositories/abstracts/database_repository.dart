@@ -1,4 +1,5 @@
 import 'package:pet_tracker_youtube/domain/models/models.dart';
+import 'package:poly_geofence_service/poly_geofence_service.dart';
 
 abstract class DatabaseRepository {
   Stream<List<PetCoordinate>> getPetGpsCoordinatesAsBroadcastStream();
@@ -6,5 +7,5 @@ abstract class DatabaseRepository {
   Future<void> addNewUser({required UserModel user}) async {}
 
   Future<void> addNewGeofence(
-      {required List fencePoints, required String userID}) async {}
+      {required List<LatLng> fencePoints, required String userID}) async {}
 }

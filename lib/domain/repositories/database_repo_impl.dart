@@ -6,6 +6,7 @@ import 'package:pet_tracker_youtube/domain/models/models.dart';
 import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart';
 import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
 import 'package:pet_tracker_youtube/utils/firestore_paths.dart';
+import 'package:poly_geofence_service/models/lat_lng.dart';
 
 final databaseRepoImplProvider = Provider<DatabaseRepoImplementation>((ref) {
   final authRepo = ref.read(firebaseAuthProvider);
@@ -63,9 +64,21 @@ class DatabaseRepoImplementation implements DatabaseRepository {
 
   @override
   Future<void> addNewGeofence(
-      {required List fencePoints, required String userID}) async {
+      {required List<LatLng> fencePoints, required String userID}) async {
     try {
-      final currentUser = _authRepo.getUser();
+      //check if there's a user doc, if not add
+      await _db
+          .collection(FirestorePaths().geofencesRootCollection)
+          .doc(userID)
+          .set({
+        'points': fencePoints
+            .map((e) => {
+                  'latitude': e.latitude,
+                  'longitude': e.longitude,
+                })
+            .toList(),
+        'userID': userID
+      });
     } catch (e) {
       throw Failure(code: "", message: e.toString());
     }

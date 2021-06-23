@@ -3,13 +3,19 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 
+import 'package:pet_tracker_youtube/domain/models/models.dart';
+import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart';
+import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
+import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
+
 /*
  * State Notifier Provider 
  */
 
 final geofenceNotifierProvider =
     StateNotifierProvider<GeofenceNotifier, GeofenceEvent>((ref) {
-  return GeofenceNotifier();
+  final _dbRepoImpl = ref.read(databaseRepoImplProvider);
+  return GeofenceNotifier(dbRepoImplementation: _dbRepoImpl, read: ref.read);
 });
 
 /*
@@ -43,12 +49,26 @@ class GeofenceAddLatLngMode extends GeofenceEvent {
   GeofenceAddLatLngMode();
 }
 
+class GeofenceError extends GeofenceEvent {
+  String message;
+  GeofenceError({
+    required this.message,
+  });
+}
+
 /*
  * State Notifier 
  */
 
 class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
-  GeofenceNotifier() : super(const GeofenceInitial());
+  final DatabaseRepository _db;
+  final Reader _read;
+
+  GeofenceNotifier(
+      {required DatabaseRepository dbRepoImplementation, required Reader read})
+      : _db = dbRepoImplementation,
+        _read = read,
+        super(const GeofenceInitial());
 
   //add new fence
   Future<void> addNewFence(
@@ -58,6 +78,15 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
     state = const GeofenceAddingNewFence();
     final newFence = PolyGeofence(id: id, polygon: fencePoints, data: data);
     state = GeofenceLoaded(geofences: [newFence]);
+    late String uid;
+    final userState = _read(userStateProvider);
+    if (userState is UserLoggedIn) {
+      uid = userState.user.uid!;
+    } else {
+      state = GeofenceError(message: "Error grabbing User ID");
+      state = throw Failure(code: '', message: "No user currently logged in");
+    }
+    await _db.addNewGeofence(userID: uid, fencePoints: fencePoints);
     log("geofence State: ${state.toString()}");
   }
 

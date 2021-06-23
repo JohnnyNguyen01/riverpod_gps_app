@@ -107,7 +107,7 @@ class _BuildCurentPositionButton extends StatelessWidget {
 
 /*
  * Directions  
- * todo: Complete this
+ * todo: Complete this and refactor business logic
  */
 class DirectionsInfoContainer extends ConsumerWidget {
   const DirectionsInfoContainer({Key? key}) : super(key: key);
@@ -123,8 +123,32 @@ class DirectionsInfoContainer extends ConsumerWidget {
         return htmlText.replaceAll(exp, '');
       }
 
-      return Card(
-        child: Text(removeAllHtmlTags(state.steps[0].htmlInstructions)),
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SafeArea(
+          child: Card(
+            color: Colors.green.shade400,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.subdirectory_arrow_left_outlined,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    removeAllHtmlTags(state.steps[0].htmlInstructions),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       );
     } else {
       return Container();
