@@ -73,10 +73,21 @@ class HomeMapController {
     if (geofenceState is GeofenceAddLatLngMode) {
       final polyLatLng = PolyLatLng.LatLng(point.latitude, point.longitude);
       geofenceState.pointList.add(polyLatLng);
-      ScaffoldMessenger.of(context).showSnackBar(Snackbars.genericSnackbar(
-          text: "Point Added! lat: ${point.latitude} lng: ${point.longitude}",
-          backgroundColor: Colors.black,
-          duration: 1));
+      geofenceState.pointCircles.add(
+        Circle(
+            circleId: const CircleId("test"),
+            center: point,
+            radius: 0.5,
+            strokeWidth: 2,
+            strokeColor: Colors.orange,
+            fillColor: Colors.orange.shade200,
+            zIndex: 5),
+      );
+      log(geofenceState.pointCircles.length.toString());
+      // ScaffoldMessenger.of(context).showSnackBar(Snackbars.genericSnackbar(
+      //     text: "Point Added! lat: ${point.latitude} lng: ${point.longitude}",
+      //     backgroundColor: Colors.black,
+      //     duration: 1));
     }
   }
 }

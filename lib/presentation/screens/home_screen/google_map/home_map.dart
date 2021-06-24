@@ -67,6 +67,9 @@ class _HomeMapState extends State<HomeMap> {
                       : const LatLng(-33.926870, 150.859040),
                   zoom: 14.4746,
                 ),
+                circles: geofenceState is GeofenceAddLatLngMode
+                    ? geofenceState.pointCircles
+                    : {},
                 rotateGesturesEnabled: true,
                 myLocationButtonEnabled: false,
                 zoomControlsEnabled: false,

@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
+import 'package:poly_geofence_service/models/lat_lng.dart' as polyLatLng;
 
 import 'package:pet_tracker_youtube/domain/models/models.dart';
 import 'package:pet_tracker_youtube/domain/repositories/abstracts/abstracts.dart';
@@ -32,6 +34,7 @@ class GeofenceInitial extends GeofenceEvent {
 
 class GeofenceLoaded extends GeofenceEvent {
   List<PolyGeofence> geofences;
+
   GeofenceLoaded({required this.geofences});
 }
 
@@ -45,7 +48,9 @@ class GeofenceRemovingFence extends GeofenceEvent {
 }
 
 class GeofenceAddLatLngMode extends GeofenceEvent {
-  List<LatLng> pointList = [];
+  List<polyLatLng.LatLng> pointList = [];
+  Set<Circle> pointCircles = {};
+
   GeofenceAddLatLngMode();
 }
 
@@ -73,7 +78,7 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
   //add new fence
   Future<void> addNewFence(
       {required String id,
-      required List<LatLng> fencePoints,
+      required List<polyLatLng.LatLng> fencePoints,
       required Map<String, dynamic> data}) async {
     state = const GeofenceAddingNewFence();
     final newFence = PolyGeofence(id: id, polygon: fencePoints, data: data);

@@ -164,9 +164,6 @@ class GeofenceOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final deviceSize = MediaQuery.of(context).size;
-    final fenceListStream = watch(geofenceListStreamProvider);
-
     return Positioned(
       bottom: 20,
       left: 5,
@@ -174,20 +171,6 @@ class GeofenceOptions extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         // crossAxisAlignment:
         children: [
-          Card(
-            child: SizedBox(
-              width: deviceSize.width * 0.9,
-              height: 120,
-              child: fenceListStream.when(
-                  data: (data) => ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (_, index) {
-                        return Text(data[index].toString());
-                      }),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (err, stck) {}),
-            ),
-          ),
           ElevatedButton(
             child: const Text('Add New Fence'),
             onPressed: () {
