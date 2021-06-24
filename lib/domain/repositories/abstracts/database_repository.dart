@@ -8,4 +8,6 @@ abstract class DatabaseRepository {
 
   Future<void> addNewGeofence(
       {required List<LatLng> fencePoints, required String userID}) async {}
+
+  Future<void> removeGeoFence({required String userID}) async {}
 }
