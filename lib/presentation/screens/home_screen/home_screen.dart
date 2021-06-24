@@ -9,6 +9,7 @@ import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/cus
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
+import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'google_map/home_map.dart';
 
@@ -40,6 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    context.read(geofencePluginProvider).dispose();
+  }
 }
 
 /*
@@ -62,12 +69,20 @@ class _BuildWidgets extends ConsumerWidget {
           : const PetCard(),
       const _BuildCurentPositionButton(),
       const DirectionsInfoContainer(),
+      /*
+       * Test button 
+       */
       ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            final petLocation = await context.read(petCoordinateProvider.last);
             log(context
                 .read(geofencePluginProvider)
-                .polyGeofenceService
-                .isRunningService
+                .checkIfPointIsInPolygon(
+                    LatLng(petLocation.coordinate.latitude,
+                        petLocation.coordinate.longitude),
+                    geofenceState is GeofenceLoaded
+                        ? geofenceState.geofences.first.polygon
+                        : [])
                 .toString());
           },
           child: const Text("Test foreground"))
@@ -84,11 +99,13 @@ class ForegroundTask extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final geofencePlugin = watch(geofencePluginProvider);
+    final geofenceState = watch(geofenceNotifierProvider);
 
     return WillStartForegroundTask(
       onWillStart: () {
+        log('foreground task started');
         // You can add a foreground task start condition.
-        return geofencePlugin.polyGeofenceService.isRunningService;
+        return true; //geofencePlugin.polyGeofenceService.isRunningService;
       },
       notificationOptions: const NotificationOptions(
           channelId: 'geofence_service_notification_channel',
@@ -96,9 +113,21 @@ class ForegroundTask extends ConsumerWidget {
           channelDescription:
               'This notification appears when the geofence service is running in the background.',
           channelImportance: NotificationChannelImportance.LOW,
-          priority: NotificationPriority.LOW),
+          priority: NotificationPriority.HIGH),
       notificationTitle: 'Geofence Service is running',
       notificationText: 'Tap to return to the app',
+      foregroundTaskOptions: const ForegroundTaskOptions(interval: 2000),
+      taskCallback: (dateTime) async {
+        if (geofenceState is GeofenceLoaded) {
+          //todo: refactor below into controller class
+          final latestPetCoordinate = await watch(petCoordinateProvider.last);
+          final check = geofencePlugin.checkIfPointIsInPolygon(
+              LatLng(latestPetCoordinate.coordinate.latitude,
+                  latestPetCoordinate.coordinate.longitude),
+              geofenceState.geofences.first.polygon);
+          log('foreground checker: $check');
+        }
+      },
       child: child,
     );
   }
