@@ -52,6 +52,16 @@ class _HomeMapState extends State<HomeMap> {
           return polygons;
         }
 
+        Set<Circle> _buildCircles() {
+          if (geofenceState is GeofenceAddLatLngMode) {
+            return geofenceState.pointCircles;
+          } else if (geofenceState is GeofenceLoaded) {
+            return geofenceState.pointCircles;
+          } else {
+            return {};
+          }
+        }
+
         return petCoordList.when(
             data: (markers) {
               return GoogleMap(
@@ -67,9 +77,7 @@ class _HomeMapState extends State<HomeMap> {
                       : const LatLng(-33.926870, 150.859040),
                   zoom: 14.4746,
                 ),
-                circles: geofenceState is GeofenceAddLatLngMode
-                    ? geofenceState.pointCircles
-                    : {},
+                circles: _buildCircles(),
                 rotateGesturesEnabled: true,
                 myLocationButtonEnabled: false,
                 zoomControlsEnabled: false,
