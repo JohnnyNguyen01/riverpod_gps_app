@@ -46,6 +46,6 @@ app.*.map.json
 /android/app/release
 
 #not include ios Build
-ios/
+ios/*
 #not include android build
-android/
+android/*
