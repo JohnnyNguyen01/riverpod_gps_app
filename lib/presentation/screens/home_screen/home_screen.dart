@@ -114,10 +114,11 @@ class ForegroundTask extends ConsumerWidget {
               'This notification appears when the geofence service is running in the background.',
           channelImportance: NotificationChannelImportance.LOW,
           priority: NotificationPriority.HIGH),
-      notificationTitle: 'Geofence Service is running',
+      notificationTitle: 'Pet Tracker is still running',
       notificationText: 'Tap to return to the app',
       foregroundTaskOptions: const ForegroundTaskOptions(interval: 2000),
       taskCallback: (dateTime) async {
+        log("task callback called");
         if (geofenceState is GeofenceLoaded) {
           //todo: refactor below into controller class
           final latestPetCoordinate = await watch(petCoordinateProvider.last);
