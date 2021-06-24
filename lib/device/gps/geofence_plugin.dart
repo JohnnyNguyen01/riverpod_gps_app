@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 
 final geofencePluginProvider = Provider<GeofencePlugin>((ref) {
