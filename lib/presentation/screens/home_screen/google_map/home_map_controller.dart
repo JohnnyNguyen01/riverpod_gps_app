@@ -77,17 +77,12 @@ class HomeMapController {
         Circle(
             circleId: CircleId(point.toString()),
             center: point,
-            radius: 0.5,
+            radius: 1,
             strokeWidth: 2,
             strokeColor: Colors.orange,
             fillColor: Colors.orange.shade200,
             zIndex: 5),
       );
-      log(geofenceState.pointCircles.length.toString());
-      // ScaffoldMessenger.of(context).showSnackBar(Snackbars.genericSnackbar(
-      //     text: "Point Added! lat: ${point.latitude} lng: ${point.longitude}",
-      //     backgroundColor: Colors.black,
-      //     duration: 1));
     }
   }
 }
