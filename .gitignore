@@ -49,3 +49,7 @@ app.*.map.json
 ios/*
 #not include android build
 android/*
+#not include macOS build
+macos/*
+#not include web build
+web/
