@@ -34,8 +34,8 @@ class GeofenceInitial extends GeofenceEvent {
 
 class GeofenceLoaded extends GeofenceEvent {
   List<PolyGeofence> geofences;
-
-  GeofenceLoaded({required this.geofences});
+  Set<Circle> pointCircles;
+  GeofenceLoaded({required this.geofences, required this.pointCircles});
 }
 
 class GeofenceAddingNewFence extends GeofenceEvent {
@@ -50,7 +50,6 @@ class GeofenceRemovingFence extends GeofenceEvent {
 class GeofenceAddLatLngMode extends GeofenceEvent {
   List<polyLatLng.LatLng> pointList = [];
   Set<Circle> pointCircles = {};
-
   GeofenceAddLatLngMode();
 }
 
@@ -79,10 +78,11 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
   Future<void> addNewFence(
       {required String id,
       required List<polyLatLng.LatLng> fencePoints,
-      required Map<String, dynamic> data}) async {
+      required Map<String, dynamic> data,
+      required Set<Circle> pointCircles}) async {
     state = const GeofenceAddingNewFence();
     final newFence = PolyGeofence(id: id, polygon: fencePoints, data: data);
-    state = GeofenceLoaded(geofences: [newFence]);
+    state = GeofenceLoaded(geofences: [newFence], pointCircles: pointCircles);
     late String uid;
     final userState = _read(userStateProvider);
     if (userState is UserLoggedIn) {
@@ -117,7 +117,5 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
     state = GeofenceAddLatLngMode();
   }
 
-  void addLatLngForNewFence() {
-    state = GeofenceAddLatLngMode();
-  }
+  void addLatLngForNewFence() {}
 }

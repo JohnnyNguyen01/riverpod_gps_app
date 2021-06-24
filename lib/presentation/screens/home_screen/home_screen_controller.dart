@@ -39,6 +39,7 @@ class HomeScreenController {
       geofenceNotifier.addNewFence(
           id: "Test",
           fencePoints: geofenceState.pointList,
+          pointCircles: geofenceState.pointCircles,
           data: {'home': 'test address @ address, NSW, 2817'});
     }
   }

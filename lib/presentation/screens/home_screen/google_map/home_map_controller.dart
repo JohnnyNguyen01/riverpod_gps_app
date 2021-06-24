@@ -34,7 +34,7 @@ class HomeMapController {
   ///`target` - the position we want to animate to.
   Future<void> setCameraToNewPosition({required LatLng target}) async {
     final mapController = await _googleMapController.future;
-    final newPosition = CameraPosition(target: target, zoom: 14.476);
+    final newPosition = CameraPosition(target: target, zoom: 30.476);
     mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
