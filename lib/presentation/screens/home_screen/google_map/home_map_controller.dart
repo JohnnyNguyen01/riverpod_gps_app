@@ -75,7 +75,7 @@ class HomeMapController {
       geofenceState.pointList.add(polyLatLng);
       geofenceState.pointCircles.add(
         Circle(
-            circleId: const CircleId("test"),
+            circleId: CircleId(point.toString()),
             center: point,
             radius: 0.5,
             strokeWidth: 2,
