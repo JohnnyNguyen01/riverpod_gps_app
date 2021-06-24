@@ -12,25 +12,6 @@ class GeofencePlugin {
 
   GeofencePlugin({required Reader read}) : _read = read;
 
-  ///Add a poly geo fence to the Geofence plugin listener
-  void addPolyGeoFenceToListener({required PolyGeofence polyGeoFence}) =>
-      _polyGeofenceService.addPolyGeofence(polyGeoFence);
-
-  ///Remove a polygeofence from the Geofence plugin listener
-  void removePolyGeoFenceFromListener({required PolyGeofence polyGeofence}) =>
-      _polyGeofenceService.removePolyGeofence(polyGeofence);
-
-  ///initialise the plugin in home_map.dart
-  void initialisePlugin() async {
-    _polyGeofenceService
-        .addPolyGeofenceStatusChangeListener(_onPolyGeofenceStatusChanged);
-    _polyGeofenceService.addPositionChangeListener(_onPositionChanged);
-    _polyGeofenceService.addLocationServiceStatusChangeListener(
-        _onLocationServiceStatusChanged);
-    _polyGeofenceService.addStreamErrorListener(_onError);
-    _polyGeofenceService.start().catchError(_onError);
-  }
-
   // Create a [PolyGeofenceService] instance and set options.
   final _polyGeofenceService = PolyGeofenceService.instance.setup(
       interval: 5000,
@@ -40,16 +21,42 @@ class GeofencePlugin {
       allowMockLocations: false,
       printDevLog: false);
 
+  PolyGeofenceService get polyGeofenceService => _polyGeofenceService;
+
+  ///Add a poly geo fence to the Geofence plugin listener
+  void addPolyGeoFenceToListener({required PolyGeofence polyGeoFence}) =>
+      _polyGeofenceService.addPolyGeofence(polyGeoFence);
+
+  ///Remove a polygeofence from the Geofence plugin listener
+  void removePolyGeoFenceFromListener({required PolyGeofence polyGeofence}) =>
+      _polyGeofenceService.removePolyGeofence(polyGeofence);
+
+  ///Remove all polygeofences
+  void removeAllFences() => _polyGeofenceService.clearPolyGeofenceList();
+
+  ///initialise the plugin in home_map.dart
+  void initialisePlugin() async {
+    _polyGeofenceService
+        .addPolyGeofenceStatusChangeListener(_onPolyGeofenceStatusChanged);
+    _polyGeofenceService.addPositionChangeListener(_onPositionChanged);
+    _polyGeofenceService.addLocationServiceStatusChangeListener(
+        _onLocationServiceStatusChanged);
+    _polyGeofenceService.addStreamErrorListener(_onError);
+    await _polyGeofenceService.start().catchError(_onError);
+  }
+
   // This function is to be called when the geofence status is changed.
   Future<void> _onPolyGeofenceStatusChanged(PolyGeofence polyGeofence,
       PolyGeofenceStatus polyGeofenceStatus, Position position) async {
     log('geofence: ${polyGeofence.toJson()}');
     log('position: ${position.toJson()}');
+    log('status: ${polyGeofenceStatus.toString()}');
   }
 
 // This function is to be called when the position has changed.
   void _onPositionChanged(Position position) {
-    log('position: ${position.toJson()}');
+    // log('position: ${position.toJson()}');
+    // log("position changed called");
   }
 
 // This function is to be called when a location service status change occurs

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'package:poly_geofence_service/models/lat_lng.dart' as polyLatLng;
 
@@ -17,7 +18,11 @@ import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 final geofenceNotifierProvider =
     StateNotifierProvider<GeofenceNotifier, GeofenceEvent>((ref) {
   final _dbRepoImpl = ref.read(databaseRepoImplProvider);
-  return GeofenceNotifier(dbRepoImplementation: _dbRepoImpl, read: ref.read);
+  final geofencePlugin = ref.read(geofencePluginProvider);
+  return GeofenceNotifier(
+      dbRepoImplementation: _dbRepoImpl,
+      read: ref.read,
+      geofencePlugin: geofencePlugin);
 });
 
 /*
@@ -66,12 +71,16 @@ class GeofenceError extends GeofenceEvent {
 
 class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
   final DatabaseRepository _db;
+  final GeofencePlugin _geofencePlugin;
   final Reader _read;
 
   GeofenceNotifier(
-      {required DatabaseRepository dbRepoImplementation, required Reader read})
+      {required DatabaseRepository dbRepoImplementation,
+      required Reader read,
+      required GeofencePlugin geofencePlugin})
       : _db = dbRepoImplementation,
         _read = read,
+        _geofencePlugin = geofencePlugin,
         super(const GeofenceInitial());
 
   //add new fence
@@ -92,6 +101,7 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
       state = throw Failure(code: '', message: "No user currently logged in");
     }
     await _db.addNewGeofence(userID: uid, fencePoints: fencePoints);
+    _geofencePlugin.addPolyGeoFenceToListener(polyGeoFence: newFence);
     log("geofence State: ${state.toString()}");
   }
 
@@ -108,6 +118,7 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
       state = throw Failure(code: '', message: "Error grabbing userID");
     }
     await _db.removeGeoFence(userID: uid);
+    _geofencePlugin.removeAllFences();
     state = const GeofenceInitial();
   }
 

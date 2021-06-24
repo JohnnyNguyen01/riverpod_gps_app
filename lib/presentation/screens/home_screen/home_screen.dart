@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pet_tracker_youtube/domain/models/models.dart';
+import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/custom_drawer.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet_card.dart';
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
-import 'package:pet_tracker_youtube/states/stream_providers/geofence_list_stream_provider.dart';
+import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'google_map/home_map.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -28,13 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read(homeScreenControllerProvider).initFunctions();
+    context.read(geofencePluginProvider).initialisePlugin();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const CustomDrawer(),
-      body: _BuildWidgets(),
+    return ForegroundTask(
+      child: Scaffold(
+        drawer: const CustomDrawer(),
+        body: _BuildWidgets(),
+      ),
     );
   }
 }
@@ -58,8 +61,46 @@ class _BuildWidgets extends ConsumerWidget {
           ? const GeofenceOptions()
           : const PetCard(),
       const _BuildCurentPositionButton(),
-      const DirectionsInfoContainer()
+      const DirectionsInfoContainer(),
+      ElevatedButton(
+          onPressed: () {
+            log(context
+                .read(geofencePluginProvider)
+                .polyGeofenceService
+                .isRunningService
+                .toString());
+          },
+          child: const Text("Test foreground"))
     ]);
+  }
+}
+
+/*
+ * Foreground task widget for GeoFence plugin 
+ */
+class ForegroundTask extends ConsumerWidget {
+  const ForegroundTask({Key? key, required this.child}) : super(key: key);
+  final Widget child;
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    final geofencePlugin = watch(geofencePluginProvider);
+
+    return WillStartForegroundTask(
+      onWillStart: () {
+        // You can add a foreground task start condition.
+        return geofencePlugin.polyGeofenceService.isRunningService;
+      },
+      notificationOptions: const NotificationOptions(
+          channelId: 'geofence_service_notification_channel',
+          channelName: 'Geofence Service Notification',
+          channelDescription:
+              'This notification appears when the geofence service is running in the background.',
+          channelImportance: NotificationChannelImportance.LOW,
+          priority: NotificationPriority.LOW),
+      notificationTitle: 'Geofence Service is running',
+      notificationText: 'Tap to return to the app',
+      child: child,
+    );
   }
 }
 
