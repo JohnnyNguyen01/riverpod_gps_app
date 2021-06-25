@@ -63,7 +63,7 @@ class NotificationsPlugin {
         0,
         'Tarzan GPS Tracker',
         'Tarzan is outside of your geofence!',
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 3)),
         const NotificationDetails(
           android: androidNotificaitonDetails,
           iOS: iosNotificationDetails,

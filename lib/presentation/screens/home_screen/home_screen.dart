@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read(homeScreenControllerProvider).initFunctions();
     context.read(geofencePluginProvider).initialisePlugin();
+    context.read(homeScreenControllerProvider).initialiseTimer();
   }
 
   @override
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
     context.read(geofencePluginProvider).dispose();
+    context.read(homeScreenControllerProvider).dispose();
   }
 }
 
@@ -75,7 +77,22 @@ class _BuildWidgets extends ConsumerWidget {
       ElevatedButton(
           onPressed: () async {
             final notificationController = watch(notifcationPluginProvider);
-            await notificationController.scheduleNotificationTest();
+            final geofencePlugin = watch(geofencePluginProvider);
+            final latestPetCoordinate = await watch(petCoordinateProvider.last);
+            final geofenceState = watch(geofenceNotifierProvider);
+
+            final vertices = geofenceState is GeofenceLoaded
+                ? geofenceState.geofences.first.polygon
+                : <LatLng>[];
+
+            final isInFence = geofencePlugin.checkIfPointIsInPolygon(
+                LatLng(latestPetCoordinate.coordinate.latitude,
+                    latestPetCoordinate.coordinate.longitude),
+                vertices);
+
+            if (!isInFence) {
+              await notificationController.scheduleNotificationTest();
+            }
           },
           child: const Text("Test foreground"))
     ]);
