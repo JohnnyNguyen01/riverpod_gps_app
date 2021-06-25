@@ -74,16 +74,8 @@ class _BuildWidgets extends ConsumerWidget {
        */
       ElevatedButton(
           onPressed: () async {
-            final petLocation = await context.read(petCoordinateProvider.last);
-            log(context
-                .read(geofencePluginProvider)
-                .checkIfPointIsInPolygon(
-                    LatLng(petLocation.coordinate.latitude,
-                        petLocation.coordinate.longitude),
-                    geofenceState is GeofenceLoaded
-                        ? geofenceState.geofences.first.polygon
-                        : [])
-                .toString());
+            final notificationController = watch(notifcationPluginProvider);
+            await notificationController.scheduleNotificationTest();
           },
           child: const Text("Test foreground"))
     ]);
@@ -118,7 +110,6 @@ class ForegroundTask extends ConsumerWidget {
       notificationText: 'Tap to return to the app',
       foregroundTaskOptions: const ForegroundTaskOptions(interval: 2000),
       taskCallback: (dateTime) async {
-        log("task callback called");
         if (geofenceState is GeofenceLoaded) {
           //todo: refactor below into controller class
           final latestPetCoordinate = await watch(petCoordinateProvider.last);

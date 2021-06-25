@@ -7,8 +7,11 @@ import 'package:pet_tracker_youtube/routes/custom_router.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/auth_state_provider.dart';
 import 'package:pet_tracker_youtube/utils/theme_data.dart';
 
+import 'device/device.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationsPlugin().initialisePlugin();
   await Firebase.initializeApp();
   runApp(
     const ProviderScope(
