@@ -54,7 +54,13 @@ class CustomDrawer extends ConsumerWidget {
                 watch(userStateProvider.notifier).logoutUser();
                 Navigator.of(context).popAndPushNamed(SignupScreen.routeName);
               },
-              child: const Text('Logout'),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (states) => Colors.black)),
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],
