@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
+import 'package:pet_tracker_youtube/utils/utils.dart';
 
 import '../../screens.dart';
 
@@ -18,7 +19,13 @@ class CustomDrawer extends ConsumerWidget {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            child: Text('PlaceHolder title'),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Assets.tarzanDrawerPhoto),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Text('Tarzan'),
           ),
           ListTile(
             leading: const Icon(Icons.add_location_alt_outlined),
