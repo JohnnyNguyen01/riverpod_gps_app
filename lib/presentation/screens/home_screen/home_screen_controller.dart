@@ -42,6 +42,7 @@ class HomeScreenController {
 
   void initFunctions() async {
     requestGpsPermissions();
+    await initialiseGeofenceFromDatabase();
   }
 
   void handleAddNewFenceBtn() {
@@ -83,6 +84,10 @@ class HomeScreenController {
     if (!isInFence) {
       await notificationController.scheduleNotificationTest();
     }
+  }
+
+  Future<void> initialiseGeofenceFromDatabase() async {
+    await _read(geofenceNotifierProvider.notifier).setFenceFromDatabase();
   }
 
   void dispose() {

@@ -1,7 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as g_map;
 import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'package:poly_geofence_service/models/lat_lng.dart' as polyLatLng;
@@ -39,7 +40,7 @@ class GeofenceInitial extends GeofenceEvent {
 
 class GeofenceLoaded extends GeofenceEvent {
   List<PolyGeofence> geofences;
-  Set<Circle> pointCircles;
+  Set<g_map.Circle> pointCircles;
   GeofenceLoaded({required this.geofences, required this.pointCircles});
 }
 
@@ -54,7 +55,7 @@ class GeofenceRemovingFence extends GeofenceEvent {
 
 class GeofenceAddLatLngMode extends GeofenceEvent {
   List<polyLatLng.LatLng> pointList = [];
-  Set<Circle> pointCircles = {};
+  Set<g_map.Circle> pointCircles = {};
   GeofenceAddLatLngMode();
 }
 
@@ -88,7 +89,7 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
       {required String id,
       required List<polyLatLng.LatLng> fencePoints,
       required Map<String, dynamic> data,
-      required Set<Circle> pointCircles}) async {
+      required Set<g_map.Circle> pointCircles}) async {
     state = const GeofenceAddingNewFence();
     final newFence = PolyGeofence(id: id, polygon: fencePoints, data: data);
     state = GeofenceLoaded(geofences: [newFence], pointCircles: pointCircles);
@@ -128,5 +129,38 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
     state = GeofenceAddLatLngMode();
   }
 
-  void addLatLngForNewFence() {}
+  Future<void> setFenceFromDatabase() async {
+    //get uid, geofence root collection
+    final databaseProvider = _read(databaseRepoImplProvider);
+    final userState = _read(userStateProvider);
+    late String? uid;
+    if (userState is UserLoggedIn) {
+      uid = userState.user.uid;
+    } else {
+      throw Failure(code: "", message: "Error retring uid");
+    }
+    //check if uid contains any geofences
+    final pointsList = await databaseProvider.getGeofence(uid: uid.toString());
+    if (pointsList.isEmpty) {
+      state = const GeofenceInitial();
+      return;
+    } else {
+      final fence = PolyGeofence(id: "Tarzan", polygon: pointsList, data: {});
+      final circleSet = pointsList
+          .map(
+            (e) => g_map.Circle(
+                circleId:
+                    g_map.CircleId('lat: ${e.latitude} lon: ${e.longitude}'),
+                center: g_map.LatLng(e.latitude, e.longitude),
+                radius: 1,
+                strokeWidth: 2,
+                strokeColor: Colors.orange,
+                fillColor: Colors.orange.shade200,
+                zIndex: 5),
+          )
+          .toSet();
+      state = GeofenceLoaded(geofences: [fence], pointCircles: circleSet);
+    }
+    //if yes create fence, if no, return state to initial
+  }
 }

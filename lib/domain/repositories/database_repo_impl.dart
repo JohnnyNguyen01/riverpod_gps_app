@@ -95,4 +95,24 @@ class DatabaseRepoImplementation implements DatabaseRepository {
       throw Failure(code: "", message: e.toString());
     }
   }
+
+  @override
+  Future<List<LatLng>> getGeofence({required String uid}) async {
+    try {
+      final userDoc = await _db
+          .collection(FirestorePaths().geofencesRootCollection)
+          .doc(uid)
+          .get();
+      if (!userDoc.exists) {
+        return [];
+      }
+      final userDocData = userDoc.data()!;
+      final List<dynamic> points = userDocData['points'];
+      return points
+          .map((point) => LatLng(point['latitude'], point['longitude']))
+          .toList();
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
+  }
 }

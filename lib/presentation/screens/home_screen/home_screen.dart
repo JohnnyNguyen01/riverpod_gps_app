@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_tracker_youtube/device/device.dart';
+import 'package:pet_tracker_youtube/domain/repositories/repositories.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/home_screen_controller.dart';
 import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/custom_drawer.dart';
@@ -10,6 +11,7 @@ import 'package:pet_tracker_youtube/presentation/screens/home_screen/widgets/pet
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
 import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:pet_tracker_youtube/states/stream_providers/pet_coordinate_stream_provider.dart';
+import 'package:pet_tracker_youtube/states/user_state_notifier.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'google_map/home_map.dart';
 
@@ -76,23 +78,12 @@ class _BuildWidgets extends ConsumerWidget {
        */
       ElevatedButton(
           onPressed: () async {
-            final notificationController = watch(notifcationPluginProvider);
-            final geofencePlugin = watch(geofencePluginProvider);
-            final latestPetCoordinate = await watch(petCoordinateProvider.last);
-            final geofenceState = watch(geofenceNotifierProvider);
-
-            final vertices = geofenceState is GeofenceLoaded
-                ? geofenceState.geofences.first.polygon
-                : <LatLng>[];
-
-            final isInFence = geofencePlugin.checkIfPointIsInPolygon(
-                LatLng(latestPetCoordinate.coordinate.latitude,
-                    latestPetCoordinate.coordinate.longitude),
-                vertices);
-
-            if (!isInFence) {
-              await notificationController.scheduleNotificationTest();
-            }
+            final fenceNotifier = watch(geofenceNotifierProvider.notifier);
+            final dbProv = watch(databaseRepoImplProvider);
+            final userState = watch(userStateProvider);
+            final uid = userState is UserLoggedIn ? userState.user.uid : "";
+            final pointsList = await dbProv.getGeofence(uid: uid.toString());
+            log(pointsList.toString());
           },
           child: const Text("Test foreground"))
     ]);
