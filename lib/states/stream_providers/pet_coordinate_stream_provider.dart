@@ -8,7 +8,7 @@ final petCoordinateProvider = StreamProvider.autoDispose((ref) async* {
 
   await for (final coordinateList in coordStream) {
     final coordValue = coordinateList.first;
-    ref
+    await ref
         .read(mapsMarkerStateNotifierProvider.notifier)
         .setMarker(latestPetCoordinate: coordValue);
     yield coordValue;

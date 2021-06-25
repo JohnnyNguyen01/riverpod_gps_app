@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
+import 'package:pet_tracker_youtube/utils/utils.dart';
 
 /*
  * State Notifier Provider 
@@ -45,7 +47,7 @@ class MapsMarkerError extends MapsMarkerStates {
 class MapsMarkerStateNotifier extends StateNotifier<MapsMarkerStates> {
   MapsMarkerStateNotifier() : super(const InitialState());
 
-  void setMarker({required PetCoordinate latestPetCoordinate}) {
+  Future<void> setMarker({required PetCoordinate latestPetCoordinate}) async {
     //set state to resetting
     state = const MapsMarkerResetting();
 
@@ -54,10 +56,16 @@ class MapsMarkerStateNotifier extends StateNotifier<MapsMarkerStates> {
           latestPetCoordinate.dateTime.toDate(),
         );
 
+    final markerIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(devicePixelRatio: 2.0),
+      Assets.mapMarker,
+    );
+
     final latestMarker = Marker(
       markerId: const MarkerId("Tarzan"),
       position: LatLng(latestPetCoordinate.coordinate.latitude,
           latestPetCoordinate.coordinate.longitude),
+      icon: markerIcon,
       infoWindow: InfoWindow(
         title: 'Tarzan',
         snippet:
