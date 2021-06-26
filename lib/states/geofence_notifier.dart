@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as g_map;
 import 'package:pet_tracker_youtube/device/device.dart';
+import 'package:pet_tracker_youtube/presentation/screens/home_screen/google_map/home_map_controller.dart';
 import 'package:poly_geofence_service/poly_geofence_service.dart';
 import 'package:poly_geofence_service/models/lat_lng.dart' as polyLatLng;
 
@@ -127,8 +128,10 @@ class GeofenceNotifier extends StateNotifier<GeofenceEvent> {
   //widget
   void showAddFenceUI() {
     state = GeofenceAddLatLngMode();
+    _read(homeMapControllerProvider).setCameraTouserLocation();
   }
 
+  ///Checks firebase for any instances of the current user's geofences.
   Future<void> setFenceFromDatabase() async {
     //get uid, geofence root collection
     final databaseProvider = _read(databaseRepoImplProvider);
