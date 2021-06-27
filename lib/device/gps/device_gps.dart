@@ -46,4 +46,18 @@ class DeviceGps {
     return Geolocator.getPositionStream(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
+
+  ///Get the bearing between a starting position and a target positionl.
+  Future<double> getBearingBetween(
+      {required double startLat,
+      required double startLng,
+      required double targetLat,
+      required double targetLng}) async {
+    try {
+      return Geolocator.bearingBetween(
+          startLat, startLng, targetLat, targetLng);
+    } catch (e) {
+      throw Failure(code: "", message: e.toString());
+    }
+  }
 }

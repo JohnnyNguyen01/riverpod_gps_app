@@ -72,8 +72,11 @@ class _HomeMapState extends State<HomeMap> {
               return ProviderListener(
                 provider: mapDirectionsStateNotifierProvider,
                 onChange: (context, state) {
+                  final markerLatLng = LatLng(markers.coordinate.latitude,
+                      markers.coordinate.longitude);
                   if (state is MapDirectionsLoaded) {
-                    homeMapController.animateCameraToNavigationPosition();
+                    homeMapController.animateCameraToNavigationPosition(
+                        markerPos: markerLatLng);
                   }
                 },
                 child: GoogleMap(

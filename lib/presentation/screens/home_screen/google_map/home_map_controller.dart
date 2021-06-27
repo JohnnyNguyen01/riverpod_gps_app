@@ -90,17 +90,24 @@ class HomeMapController {
     }
   }
 
-  void animateCameraToNavigationPosition() async {
+  void animateCameraToNavigationPosition({required LatLng markerPos}) async {
     final positionStream =
         _read(deviceGpsRepoProvider).getCurrentPositionStream();
     final mapController = await _googleMapController.future;
+    final deviceGpsRepo = _read(deviceGpsRepoProvider);
 
     positionStream.listen((position) async {
       log('map controller: MapDirectionsLoaded position is animated to ${position.toString()}');
+      final bearing = await deviceGpsRepo.getBearingBetween(
+          startLat: position.latitude,
+          startLng: position.longitude,
+          targetLat: markerPos.latitude,
+          targetLng: markerPos.longitude);
       final newPos = CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(position.latitude, position.longitude),
           tilt: 45,
+          bearing: bearing,
           zoom: 20.0,
           //todo: get bearing to target LatLng
         ),
