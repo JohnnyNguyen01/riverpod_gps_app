@@ -19,6 +19,11 @@ class HomeMap extends StatefulWidget {
 
 class _HomeMapState extends State<HomeMap> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
@@ -64,36 +69,44 @@ class _HomeMapState extends State<HomeMap> {
 
         return petCoordList.when(
             data: (markers) {
-              return GoogleMap(
-                mapType: MapType.normal,
-                markers: mapMarkerState is MapsMarkerSet
-                    ? mapMarkerState.markerSet
-                    : {},
-                //todo: should maybe point to Tarzan?
-                initialCameraPosition: CameraPosition(
-                  // tilt: 45.0,
-                  target: userState is UserLoggedIn
-                      ? userState.user.location
-                      : const LatLng(-33.926870, 150.859040),
-                  zoom: 14.4746,
+              return ProviderListener(
+                provider: mapDirectionsStateNotifierProvider,
+                onChange: (context, state) {
+                  if (state is MapDirectionsLoaded) {
+                    homeMapController.animateCameraToNavigationPosition();
+                  }
+                },
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  markers: mapMarkerState is MapsMarkerSet
+                      ? mapMarkerState.markerSet
+                      : {},
+                  //todo: should maybe point to Tarzan?
+                  initialCameraPosition: CameraPosition(
+                    // tilt: 45.0,
+                    target: userState is UserLoggedIn
+                        ? userState.user.location
+                        : const LatLng(-33.926870, 150.859040),
+                    zoom: 14.4746,
+                  ),
+                  circles: _buildCircles(),
+                  rotateGesturesEnabled: true,
+                  myLocationButtonEnabled: false,
+                  zoomControlsEnabled: false,
+                  myLocationEnabled: true,
+                  polylines: _buildPolyline(mapDirectionsState),
+                  polygons: _buildPolygons(),
+                  onTap: (latLng) {
+                    homeMapController.addLatLngToGeofence(
+                        point: latLng, context: context);
+                    //todo: Figure out how to change this, currently used to
+                    //set GeofenceUI Card List
+                    setState(() {});
+                  },
+                  onMapCreated: (GoogleMapController controller) {
+                    homeMapController.googleMapController.complete(controller);
+                  },
                 ),
-                circles: _buildCircles(),
-                rotateGesturesEnabled: true,
-                myLocationButtonEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationEnabled: true,
-                polylines: _buildPolyline(mapDirectionsState),
-                polygons: _buildPolygons(),
-                onTap: (latLng) {
-                  homeMapController.addLatLngToGeofence(
-                      point: latLng, context: context);
-                  //todo: Figure out how to change this, currently used to
-                  //set GeofenceUI Card List
-                  setState(() {});
-                },
-                onMapCreated: (GoogleMapController controller) {
-                  homeMapController.googleMapController.complete(controller);
-                },
               );
             },
             loading: () => const Center(

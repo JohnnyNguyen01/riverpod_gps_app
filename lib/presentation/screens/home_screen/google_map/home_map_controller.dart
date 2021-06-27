@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,13 +8,17 @@ import 'package:pet_tracker_youtube/device/device.dart';
 import 'package:pet_tracker_youtube/domain/models/models.dart';
 import 'package:pet_tracker_youtube/presentation/widgets/widgets.dart';
 import 'package:pet_tracker_youtube/states/geofence_notifier.dart';
+import 'package:pet_tracker_youtube/states/map_directions_state_notifier.dart';
 import 'package:poly_geofence_service/models/lat_lng.dart' as PolyLatLng;
 /*
  * Controller Provider 
  */
 
 final homeMapControllerProvider = Provider<HomeMapController>((ref) {
-  return HomeMapController(read: ref.read);
+  final mapDirectionsState = ref.watch;
+  return HomeMapController(
+    read: ref.read,
+  );
 });
 
 /*
@@ -83,5 +88,24 @@ class HomeMapController {
             zIndex: 5),
       );
     }
+  }
+
+  void animateCameraToNavigationPosition() async {
+    final positionStream =
+        _read(deviceGpsRepoProvider).getCurrentPositionStream();
+    final mapController = await _googleMapController.future;
+
+    positionStream.listen((position) async {
+      log('map controller: MapDirectionsLoaded position is animated to ${position.toString()}');
+      final newPos = CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          tilt: 45,
+          zoom: 20.0,
+          //todo: get bearing to target LatLng
+        ),
+      );
+      await mapController.animateCamera(newPos);
+    });
   }
 }

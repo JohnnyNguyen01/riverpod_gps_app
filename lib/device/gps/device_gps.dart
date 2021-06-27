@@ -40,4 +40,10 @@ class DeviceGps {
       throw Failure(code: "", message: e.toString());
     }
   }
+
+  ///Returns a stream of the current device's position.
+  Stream<Position> getCurrentPositionStream() {
+    return Geolocator.getPositionStream(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
+  }
 }
