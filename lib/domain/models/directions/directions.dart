@@ -7,6 +7,7 @@ class Directions {
   final List<PointLatLng> polylinePoints;
   final String totalDistance;
   final String totalDuration;
+  final String travelMode;
   final List<Step> steps;
 
   Directions(
@@ -14,9 +15,11 @@ class Directions {
       required this.polylinePoints,
       required this.totalDistance,
       required this.totalDuration,
-      required this.steps});
+      required this.steps,
+      required this.travelMode});
 
-  static Directions? fromMap({required Map<String, dynamic> map}) {
+  static Directions? fromMap(
+      {required Map<String, dynamic> map, required String travelMode}) {
     //bounds
     final northEast = LatLng(
         map['bounds']['northeast']['lat'], map['bounds']['northeast']['lng']);
@@ -45,7 +48,8 @@ class Directions {
         polylinePoints: polyPoints,
         totalDistance: distance,
         totalDuration: duration,
-        steps: steps);
+        steps: steps,
+        travelMode: travelMode);
   }
 
   @override

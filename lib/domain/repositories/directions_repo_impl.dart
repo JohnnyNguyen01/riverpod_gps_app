@@ -45,7 +45,8 @@ class DirectionsRepositoryImplementation implements DirectionsRepository {
       if (response.statusCode == 200) {
         Map<String, dynamic> responseBody = response.data['routes'][0];
         // log(responseBody['bounds']['northeast']['lat'].toString());
-        Directions? newDirection = Directions.fromMap(map: responseBody);
+        Directions? newDirection =
+            Directions.fromMap(map: responseBody, travelMode: travelMode);
         return newDirection;
       }
     } catch (e) {
