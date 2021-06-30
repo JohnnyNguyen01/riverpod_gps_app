@@ -93,8 +93,13 @@ class UserStateNotifier extends StateNotifier<UserState> {
       log("User Logged In Successfully: ${user.toString()}");
     } on FirebaseAuthException catch (e) {
       state = UserError(error: e.message!);
+      log(state.toString());
       throw Failure(code: e.code, message: e.message);
-    } //todo add other failures
+    } on Failure catch (e) {
+      state = UserError(error: e.toString());
+      log(state.toString());
+      throw Failure(code: '', message: e.message);
+    }
   }
 
   ///Sign's up a new user to Firebase, and creates a new document in `Users`

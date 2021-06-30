@@ -59,7 +59,6 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
 
   ///Set the latest directions between the current device and the latest pet
   ///gps coordinate.
-  //todo: refactor to 1 try - catch statement
   Future<void> setNewDirections({required String travelMode}) async {
     try {
       // -- set state to loading --
@@ -69,25 +68,16 @@ class MapDirectionsStateNotifier extends StateNotifier<MapDirectionsStates> {
       //set origin to user state origin
       final userState = _read(userStateProvider);
       LatLng origin = const LatLng(0, 0);
-      try {
-        if (userState is UserLoggedIn) {
-          origin = userState.user.location;
-        } else {
-          throw Failure(code: "", message: "Couldn't load ");
-        }
-      } on Failure catch (e) {
-        throw Failure(code: "", message: e.message);
+      if (userState is UserLoggedIn) {
+        origin = userState.user.location;
+      } else {
+        throw Failure(code: "", message: "Couldn't load ");
       }
-
       //set destination to latest stream provider destination
       LatLng destination = const LatLng(0, 0);
       final currentMarkeState = _read(mapsMarkerStateNotifierProvider);
-      try {
-        if (currentMarkeState is MapsMarkerSet) {
-          destination = currentMarkeState.markerSet.first.position;
-        }
-      } catch (e) {
-        throw Failure(code: "", message: e.toString());
+      if (currentMarkeState is MapsMarkerSet) {
+        destination = currentMarkeState.markerSet.first.position;
       }
       final directions = await _directionsRepo.getDirections(
           origin: origin, destination: destination, travelMode: travelMode);

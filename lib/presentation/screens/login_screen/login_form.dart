@@ -31,7 +31,7 @@ class _LoginFormState extends State<LoginForm> {
 
       //todo: clean up somehow
       Widget _mapButtonToState() {
-        Widget progressIndicator = const Center(
+        Widget progressIndicator = Center(
           child: CircularProgressIndicator(),
         );
         if (userState is UserInitial) {

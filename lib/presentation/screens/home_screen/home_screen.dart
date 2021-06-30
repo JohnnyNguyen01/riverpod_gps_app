@@ -76,16 +76,8 @@ class _BuildWidgets extends ConsumerWidget {
       /*
        * Test button 
        */
-      ElevatedButton(
-          onPressed: () async {
-            final fenceNotifier = watch(geofenceNotifierProvider.notifier);
-            final dbProv = watch(databaseRepoImplProvider);
-            final userState = watch(userStateProvider);
-            final uid = userState is UserLoggedIn ? userState.user.uid : "";
-            final pointsList = await dbProv.getGeofence(uid: uid.toString());
-            log(pointsList.toString());
-          },
-          child: const Text("Test foreground"))
+      // ElevatedButton(
+      //     onPressed: () async {}, child: const Text("Test foreground"))
     ]);
   }
 }
