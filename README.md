@@ -1,3 +1,14 @@
+Hi Johnny,
+
+How are you? Hope you are doing well.
+This message from Nikolay, we cooperated on Upwork. Sorry that I disturb you, but you desn't reply on my messages on Upwork.
+Johnny, I have to ask you to close our current contract, if you don't mind, of course. The main reason is that open contracts without activity may decrease my rating on the UpWork platform that may negatively affect finding new jobs. Hope for your understanding.
+In any case, I'm really happy to work with you. 
+
+Thank you very much.
+
+Kind regards,
+Nikolay.
 
 
 # Tarzan Pet Tracker
